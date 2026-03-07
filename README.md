@@ -51,6 +51,10 @@ Install Garmin Connect, enable Health / Apple Health sharing so HR and HRV sync 
 
 See `backend/README.md` or `render.yaml` for Render Web Service setup.
 
+## Push to GitHub
+
+To connect this repo to your GitHub repository and push, see [docs/GITHUB.md](docs/GITHUB.md).
+
 ## License
 
 Proprietary / your choice.
