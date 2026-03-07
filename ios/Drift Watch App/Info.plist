@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Drift</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Drift uses heart rate variability to help you stay in focus.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Drift records mindfulness sessions to enable continuous HRV measurement.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>workout-processing</string>
+	</array>
+	<key>WKCompanionAppBundleIdentifier</key>
+	<string>$(DEVELOPMENT_TEAM).drift</string>
+</dict>
+</plist>

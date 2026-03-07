@@ -1,0 +1,5 @@
+# Placeholder: add your Firebase config here (do not commit real secrets).
+# - Copy GoogleService-Info.plist from Firebase Console into the iOS app target in Xcode.
+# - Add GoogleService-Info.plist to .gitignore (already done at repo root).
+# - For backend: download service account JSON, set GOOGLE_APPLICATION_CREDENTIALS or
+#   GOOGLE_APPLICATION_CREDENTIALS_JSON in Render env.

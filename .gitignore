@@ -1,0 +1,75 @@
+# Xcode
+build/
+DerivedData/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.swiftpm/
+.build/
+Packages/
+Package.resolved
+
+# CocoaPods
+Pods/
+Podfile.lock
+*.xcworkspace
+!default.xcworkspace
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+.env
+.env.local
+.env.*.local
+*.egg-info/
+.eggs/
+dist/
+*.egg
+
+# Backend
+backend/__pycache__/
+backend/**/__pycache__/
+backend/.env
+backend/.venv/
+
+# Firebase & secrets (do not commit)
+GoogleService-Info.plist
+**/GoogleService-Info.plist
+*-ServiceAccount.json
+firebase/*.json
+*.p8
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/

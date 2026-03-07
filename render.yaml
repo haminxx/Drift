@@ -1,0 +1,16 @@
+# Render Blueprint: Drift Backend
+# Connect this repo in Render; set root to backend/ or run from repo root with working_directory.
+services:
+  - type: web
+    name: drift-backend
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PORT
+        generateValue: true
+    # Optional when you add Firebase:
+    # envVars:
+    #   - key: GOOGLE_APPLICATION_CREDENTIALS_JSON
+    #     sync: false
