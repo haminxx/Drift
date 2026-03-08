@@ -13,6 +13,7 @@ Use this as a reference when configuring the Drift app in Xcode. Do not commit s
 | **Background Modes** | Drift Watch App | Enable "Workout" so HR/HRV can be collected during a mindfulness session in the background. |
 | **Time-Sensitive Notifications** | Drift (iOS) | Allow the "Focus drifting. Entertainment apps will lock in 5 minutes." notification to break through Focus and appear prominently. |
 | **Family Controls** | Drift (iOS) | Required for ManagedSettings and ApplicationToken (Screen Time–style app blocking). App Store review may require justification for usage. |
+| **Sign in with Apple** | Drift (iOS) | Optional; required if you enable Apple as an auth provider in Firebase Authentication. |
 
 ---
 
@@ -40,12 +41,13 @@ Use this as a reference when configuring the Drift app in Xcode. Do not commit s
 2. **Drift Watch App** → Signing & Capabilities → + Capability → **Background Modes** → enable **Workout**.
 3. Select the **Drift** (iOS) target → Signing & Capabilities → + Capability → **Time-Sensitive Notifications** (if available in your Xcode version).
 4. **Drift** (iOS) → Signing & Capabilities → + Capability → **Family Controls**.
-5. In both targets’ **Info** tabs, add the usage description keys above where applicable.
+5. In both targets' **Info** tabs, add the usage description keys above where applicable.
 
 ---
 
 ## Notes
 
 - **HealthKit on Watch**: The Watch app uses HealthKit to read HR/HRV from the watch and send via WatchConnectivity.
-- **HealthKit on iOS (Garmin pipeline)**: The iOS app can read HR/HRV from Apple Health. For **Garmin watch** users: install the Garmin Connect app, enable “Health” / “Apple Health” sharing in Garmin Connect so Heart Rate and HRV are written to Apple Health; then Drift will read that data from HealthKit when the app is running (and in background if background delivery is enabled).
-- **Family Controls**: Storing `ApplicationToken` values requires the one-time authorization flow; tokens are opaque and app-specific. You cannot hardcode tokens for other users’ devices.
+- **HealthKit on iOS (Garmin pipeline)**: The iOS app can read HR/HRV from Apple Health. For **Garmin watch** users: install the Garmin Connect app, enable "Health" / "Apple Health" sharing in Garmin Connect so Heart Rate and HRV are written to Apple Health; then Drift will read that data from HealthKit when the app is running (and in background if background delivery is enabled).
+- **Family Controls**: Storing `ApplicationToken` values requires the one-time authorization flow; tokens are opaque and app-specific. You cannot hardcode tokens for other users' devices.
+- **Firebase**: For login and saved summaries, add the Firebase iOS SDK and `GoogleService-Info.plist` from the Firebase Console; do not commit the plist (keep it in `.gitignore`). See [SETUP.md](SETUP.md) for GitHub, Render, and Firebase setup.

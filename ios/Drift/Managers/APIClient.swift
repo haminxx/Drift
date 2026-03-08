@@ -14,6 +14,9 @@ final class APIClient: ObservableObject {
     /// Base URL for the backend (e.g. https://your-app.onrender.com). Set from config/plist.
     var baseURL: URL = URL(string: "https://your-app.onrender.com")!
 
+    /// When set, the backend request will include Authorization: Bearer <token>. Set from FirebaseManager.getIdToken.
+    var authTokenProvider: (() async -> String?)?
+
     private let session: URLSession = .shared
     private let decoder: JSONDecoder = {
         let d = JSONDecoder()
@@ -49,30 +52,35 @@ final class APIClient: ObservableObject {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try? JSONSerialization.data(withJSONObject: body)
 
-        let task = session.dataTask(with: request) { [decoder] data, _, error in
-            if let error = error {
-                DispatchQueue.main.async { completion?(.failure(error)) }
-                return
+        Task { @MainActor in
+            if let provider = authTokenProvider, let token = await provider() {
+                request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             }
-            guard let data = data else {
-                DispatchQueue.main.async { completion?(.failure(APIClientError.noData)) }
-                return
-            }
-            do {
-                let response = try decoder.decode(FlowStateResponse.self, from: data)
-                DispatchQueue.main.async {
-                    completion?(.success(response))
-                    if response.isInFlow {
-                        self.onFlowStateRestored?()
-                    } else {
-                        self.onFlowStateLost?()
-                    }
+            let task = session.dataTask(with: request) { [decoder] data, _, error in
+                if let error = error {
+                    DispatchQueue.main.async { completion?(.failure(error)) }
+                    return
                 }
-            } catch {
-                DispatchQueue.main.async { completion?(.failure(error)) }
+                guard let data = data else {
+                    DispatchQueue.main.async { completion?(.failure(APIClientError.noData)) }
+                    return
+                }
+                do {
+                    let response = try decoder.decode(FlowStateResponse.self, from: data)
+                    DispatchQueue.main.async {
+                        completion?(.success(response))
+                        if response.isInFlow {
+                            self.onFlowStateRestored?()
+                        } else {
+                            self.onFlowStateLost?()
+                        }
+                    }
+                } catch {
+                    DispatchQueue.main.async { completion?(.failure(error)) }
+                }
             }
+            task.resume()
         }
-        task.resume()
     }
 }
 

@@ -57,6 +57,8 @@ GoogleService-Info.plist
 **/GoogleService-Info.plist
 *-ServiceAccount.json
 firebase/*.json
+firebase-key.json
+*firebase*adminsdk*.json
 *.p8
 
 # IDE

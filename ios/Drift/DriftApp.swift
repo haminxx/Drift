@@ -10,12 +10,14 @@ import SwiftUI
 @main
 struct DriftApp: App {
     init() {
+        FirebaseManager.configure()
         let wc = WatchConnectivityManager.shared
         let api = APIClient.shared
         let timer = ShieldTimerManager.shared
         let shield = ShieldManager.shared
         let health = HealthKitManager.shared
 
+        api.authTokenProvider = { await FirebaseManager.shared.getIdToken() }
         wc.onHRVPayloadReceived = { payload in
             api.postHRVStream(payload)
         }
@@ -38,8 +40,7 @@ struct DriftApp: App {
 
     var body: some Scene {
         WindowGroup {
-            // Your UI: connect to ShieldTimerManager.shared.remainingSeconds, etc.
-            Text("Drift")
+            ContentView()
         }
     }
 }

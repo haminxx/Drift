@@ -51,6 +51,8 @@ Install Garmin Connect, enable Health / Apple Health sharing so HR and HRV sync 
 
 See `backend/README.md` or `render.yaml` for Render Web Service setup.
 
+**When is Render for?** Render is for **deploying** your Python backend so it has a **public URL**. The iOS app sends HRV to that backend. For development you run the backend on your Mac (localhost/LAN) and don't need Render. Use Render when the phone can't reach your Mac (e.g. cellular, other network, or testers need a stable URL): deploy the backend to Render and set the app's `baseURL` to that URL. So Render = optional hosting for the backend when you need it reachable from the internet; it's not for running the app itself.
+
 ## Push to GitHub
 
 To connect this repo to your GitHub repository and push, see [docs/GITHUB.md](docs/GITHUB.md).

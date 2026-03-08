@@ -10,8 +10,11 @@
    - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
    - **Plan**: Free (or paid to avoid spin-down).
 
-4. **Environment**: Render sets `PORT` automatically. Add any optional vars (e.g. Firebase) in the Render dashboard.
+4. **Environment**: Render sets `PORT` automatically. For Firebase (Auth + Firestore), add:
+   - **GOOGLE_APPLICATION_CREDENTIALS_JSON**: paste the **contents** of your Firebase service account JSON key (from Firebase Console → Project Settings → Service accounts → Generate new private key). Mark as secret. The backend uses this to verify tokens and read/write Firestore.
 
 5. **Deploy**: After the first deploy, note the URL (e.g. `https://drift-backend.onrender.com`). Set this as the backend base URL in the iOS app (e.g. `APIClient.shared.baseURL` or a config plist).
 
 6. **Optional**: Use the `render.yaml` in the repo root as a Blueprint (Render → New → Blueprint) to create the service from spec.
+
+For a full step-by-step (GitHub, Render, Firebase, iOS), see [docs/SETUP.md](../docs/SETUP.md).
