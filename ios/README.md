@@ -12,7 +12,8 @@ Swift source files are in place. Create the Xcode project as follows (or open an
 ## 2. Replace / add files
 
 - Replace the default `DriftApp.swift` with the one in `Drift/DriftApp.swift` (or copy its contents).
-- Add the `Drift/Managers` and `Drift/Models` folders to the **Drift** (iOS) target.
+- Add the `Drift/Managers`, `Drift/Models`, `Drift/Views`, and `Drift/Views/Components` folders to the **Drift** (iOS) target.
+- Link the **Charts** framework (iOS 16+): select the Drift target → General → Frameworks → **+** → **Charts.framework** (or add via **Build Phases → Link Binary**). Set **Minimum Deployment** to iOS 16 if you use `WellnessTrendChartView`.
 - Add the `Drift Watch App/` folder contents to the **Drift Watch App** target (Managers, Models, DriftWatchApp.swift, Info.plist).
 - Use the provided `Info.plist` for both targets or merge keys into the targets’ Info tabs.
 
@@ -29,7 +30,7 @@ Set `APIClient.shared.baseURL` from a config plist or build setting. For develop
 
 ## 5. Family Controls
 
-Call `ShieldManager.shared.requestAuthorization` from your UI once; then use the system picker to let the user select apps to manage. Store the chosen tokens in `ShieldManager.shared.applicationTokensToShield` (you’ll get these from the FamilyActivityPicker / authorization result in your UI).
+Open **Brick mode & breaks** from the home toolbar (slider icon). Request Screen Time access, then use **FamilyActivityPicker** for **apps to block** and **essentials** (always allowed). Saved tokens live on `ShieldManager` (`blockedApplicationTokens`, `essentialApplicationTokens`; effective shield = blocked − essential).
 
 ## Folder layout (reference)
 

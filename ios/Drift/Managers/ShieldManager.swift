@@ -2,9 +2,8 @@
 //  ShieldManager.swift
 //  Drift
 //
-//  FamilyControls + ManagedSettings: apply shield to distracting apps when timer expires and
-//  is_in_flow is still false; remove shield when flow state is restored.
-//  Entitlement: Family Controls (Screen Time) capability in Xcode. App Store may require justification.
+//  FamilyControls + ManagedSettings. Pick apps to block in brick mode and essentials that stay open.
+//  Effective shield = blocked minus essential. Entitlement: Family Controls in Xcode.
 //
 
 import Foundation
@@ -16,16 +15,24 @@ final class ShieldManager: ObservableObject {
 
     private let store = ManagedSettingsStore()
 
-    /// Application tokens to shield (from user's one-time Family Controls authorization).
-    /// You will build a UI for the user to select apps; this holds the result.
-    /// Set this after AuthorizationCenter.shared.requestAuthorization(for: .individual) and
-    /// the user selecting which apps to manage.
-    var applicationTokensToShield: Set<ApplicationToken> = []
+    /// Apps to restrict when brick / shield is active.
+    var blockedApplicationTokens: Set<ApplicationToken> = []
+
+    /// Apps that remain accessible even when blocked list would cover them (always-allow).
+    var essentialApplicationTokens: Set<ApplicationToken> = []
+
+    /// Legacy: same as blocked list.
+    var applicationTokensToShield: Set<ApplicationToken> {
+        get { blockedApplicationTokens }
+        set { blockedApplicationTokens = newValue }
+    }
+
+    private var effectiveShieldTokens: Set<ApplicationToken> {
+        blockedApplicationTokens.subtracting(essentialApplicationTokens)
+    }
 
     private init() {}
 
-    /// One-time: request Screen Time authorization and let user select apps to manage.
-    /// Call from your UI; then persist the chosen tokens into applicationTokensToShield.
     func requestAuthorization(completion: @escaping (Result<AuthorizationResult, Error>) -> Void) {
         Task {
             do {
@@ -41,17 +48,25 @@ final class ShieldManager: ObservableObject {
         }
     }
 
-    /// Call when 5-minute timer has expired and backend still returns is_in_flow == false.
-    func applyShield() {
-        guard !applicationTokensToShield.isEmpty else { return }
-        store.shield.applications = applicationTokensToShield
+    func updateBlockedTokens(from selection: FamilyActivitySelection) {
+        blockedApplicationTokens = selection.applicationTokens
     }
 
-    /// Call when backend returns is_in_flow == true so user can access apps again.
-    func removeShield() {
+    func updateEssentialTokens(from selection: FamilyActivitySelection) {
+        essentialApplicationTokens = selection.applicationTokens
+    }
+
+    func applyShields() {
+        guard !effectiveShieldTokens.isEmpty else { return }
+        store.shield.applications = effectiveShieldTokens
+    }
+
+    func removeShields() {
         store.shield.applications = nil
     }
+
+    func applyShield() { applyShields() }
+    func removeShield() { removeShields() }
 }
 
-/// Placeholder for authorization result (e.g. you might store that auth was granted).
 struct AuthorizationResult {}

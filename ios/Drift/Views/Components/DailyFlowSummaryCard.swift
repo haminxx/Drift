@@ -2,15 +2,21 @@
 //  DailyFlowSummaryCard.swift
 //  Drift
 //
-//  Card A: Daily Flow Summary — circular chart (Flow vs Drift % today) + text.
-//  Structurally ready for FlowStateResponse or aggregated stats.
+//  Card A: Flow vs drift share from today's saved backend samples (WellnessHistoryStore).
 //
 
 import SwiftUI
 
 struct DailyFlowSummaryCard: View {
-    /// Placeholder; later bind to aggregated flow vs drift percentage (e.g. 0.6 = 60% flow)
-    var flowPercent: Double = 0.6
+    @ObservedObject private var history = WellnessHistoryStore.shared
+
+    private var flowPercent: Double {
+        let cal = Calendar.current
+        let today = history.samples.filter { cal.isDateInToday($0.date) }
+        guard !today.isEmpty else { return 0.55 }
+        let inFlow = today.filter { $0.serverInFlow == true }.count
+        return Double(inFlow) / Double(today.count)
+    }
 
     var body: some View {
         SummaryCardView(title: "Daily Flow Summary", subtitle: "Today") {

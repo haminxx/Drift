@@ -12,7 +12,9 @@ struct ContentView: View {
 
     var body: some View {
         if showHome {
-            HomeDashboardView()
+            NavigationStack {
+                HomeDashboardView()
+            }
         } else {
             SplashView(onContinue: { showHome = true })
         }

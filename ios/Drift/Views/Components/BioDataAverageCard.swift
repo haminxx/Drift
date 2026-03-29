@@ -2,14 +2,14 @@
 //  BioDataAverageCard.swift
 //  Drift
 //
-//  Card C: Bio-Data Average — Avg. HRV Score, Restability Score. Placeholder values.
-//  HealthKit read (and background delivery if needed) required; configure in Xcode
-//  Signing & Capabilities and see docs/ENTITLEMENTS.md.
+//  Card C: Current HRV + 7-day baseline from HealthKit pipeline.
 //
 
 import SwiftUI
 
 struct BioDataAverageCard: View {
+    @ObservedObject private var flow = FlowStateManager.shared
+
     var body: some View {
         SummaryCardView(
             icon: { Image(systemName: "heart.fill").foregroundStyle(DriftColorPalette.redMagenta) },
@@ -18,20 +18,29 @@ struct BioDataAverageCard: View {
         ) {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Text("Avg. HRV Score")
+                    Text("Current HRV")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                     Spacer()
-                    Text("— ms")
+                    Text(flow.currentHRV.map { "\(Int($0)) ms" } ?? "—")
                         .font(.subheadline)
                         .fontWeight(.medium)
                 }
                 HStack {
-                    Text("Restability Score")
+                    Text("7-day baseline")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                     Spacer()
-                    Text("—")
+                    Text(flow.baselineHRV.map { "\(Int($0)) ms" } ?? "—")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                }
+                HStack {
+                    Text("vs baseline")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Text("\(Int(flow.hrvRelativeToBaseline * 100))%")
                         .font(.subheadline)
                         .fontWeight(.medium)
                 }

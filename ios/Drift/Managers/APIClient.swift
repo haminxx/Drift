@@ -11,8 +11,8 @@ import Foundation
 final class APIClient: ObservableObject {
     static let shared = APIClient()
 
-    /// Base URL for the backend (e.g. https://your-app.onrender.com). Set from config/plist.
-    var baseURL: URL = URL(string: "https://your-app.onrender.com")!
+    /// Base URL for the backend (Render). Override in Xcode scheme or plist if needed.
+    var baseURL: URL = URL(string: "https://drift-hrv-backend.onrender.com")!
 
     /// When set, the backend request will include Authorization: Bearer <token>. Set from FirebaseManager.getIdToken.
     var authTokenProvider: (() async -> String?)?
@@ -30,6 +30,13 @@ final class APIClient: ObservableObject {
     var onFlowStateRestored: (() -> Void)?
 
     private init() {}
+
+    private static func extractHrvMs(from body: [String: Any]) -> Double? {
+        guard let readings = body["readings"] as? [[String: Any]],
+              let first = readings.first,
+              let hrv = first["hrv_sdnn"] as? Double else { return nil }
+        return hrv
+    }
 
     /// POST a single HRV payload (or batch) to /api/v1/hrv_stream and handle response.
     func postHRVStream(_ payload: HRVPayload, completion: ((Result<FlowStateResponse, Error>) -> Void)? = nil) {
@@ -68,6 +75,15 @@ final class APIClient: ObservableObject {
                 do {
                     let response = try decoder.decode(FlowStateResponse.self, from: data)
                     DispatchQueue.main.async {
+                        DriftSessionState.shared.lastServerInFlow = response.isInFlow
+                        if let hrv = Self.extractHrvMs(from: body) {
+                            WellnessHistoryStore.shared.append(
+                                hrvSDNN: hrv,
+                                serverInFlow: response.isInFlow,
+                                localStressScore: HealthKitManager.shared.lastLocalStressScore,
+                                source: (body["device_id"] as? String) ?? "api"
+                            )
+                        }
                         completion?(.success(response))
                         if response.isInFlow {
                             self.onFlowStateRestored?()

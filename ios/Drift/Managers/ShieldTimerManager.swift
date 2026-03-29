@@ -36,8 +36,10 @@ final class ShieldTimerManager: ObservableObject {
     func startWarning() {
         cancelWarning()
         requestNotificationPermissionIfNeeded()
-        scheduleTimeSensitiveNotification()
-        remainingSeconds = warningDuration
+        let duration = UserPreferencesStore.shared.warningBeforeShieldDuration
+        warningDuration = duration
+        scheduleTimeSensitiveNotification(minutes: UserPreferencesStore.shared.warningBeforeShieldMinutes)
+        remainingSeconds = duration
         timerStartDate = Date()
         timerTask = Task { [weak self] in
             await self?.runTimer()
@@ -72,10 +74,10 @@ final class ShieldTimerManager: ObservableObject {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in }
     }
 
-    private func scheduleTimeSensitiveNotification() {
+    private func scheduleTimeSensitiveNotification(minutes: Int) {
         let content = UNMutableNotificationContent()
         content.title = "Focus drifting"
-        content.body = "Entertainment apps will lock in 5 minutes."
+        content.body = "Entertainment apps will lock in \(minutes) minute\(minutes == 1 ? "" : "s")."
         if #available(iOS 15.0, *) {
             content.interruptionLevel = .timeSensitive
         }
