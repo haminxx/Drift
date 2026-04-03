@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// Shared network client; `@unchecked Sendable` so `URLSession` `@Sendable` completions can reference it safely.
+/// Shared network client; `@unchecked Sendable` so `URLSession` async work can be used safely from concurrency.
 final class APIClient: ObservableObject, @unchecked Sendable {
     static let shared = APIClient()
 
@@ -70,50 +70,53 @@ final class APIClient: ObservableObject, @unchecked Sendable {
 
     /// POST request body (readings + optional device_id, session_id) to /api/v1/hrv_stream.
     func postHRVStream(body: [String: Any], completion: ((Result<FlowStateResponse, Error>) -> Void)? = nil) {
+        Task {
+            do {
+                let response = try await postHRVStreamAsync(body: body)
+                await MainActor.run {
+                    Self.applyFlowResponse(response, body: body, completion: completion)
+                }
+            } catch {
+                await MainActor.run { completion?(.failure(error)) }
+            }
+        }
+    }
+
+    /// Async POST — single `URLSession` path (no nested `dataTask` / Sendable issues).
+    private func postHRVStreamAsync(body: [String: Any]) async throws -> FlowStateResponse {
         let url = apiURL(path: "api/v1/hrv_stream")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        if let provider = authTokenProvider, let token = await provider() {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        let (data, response) = try await session.data(for: request)
+        try throwIfHTTPError(data: data, response: response)
+        return try decoder.decode(FlowStateResponse.self, from: data)
+    }
 
-        Task { @MainActor in
-            if let provider = authTokenProvider, let token = await provider() {
-                request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            }
-            let task = session.dataTask(with: request) { [weak self, decoder] data, _, error in
-                if let error = error {
-                    DispatchQueue.main.async { completion?(.failure(error)) }
-                    return
-                }
-                guard let data = data else {
-                    DispatchQueue.main.async { completion?(.failure(APIClientError.noData)) }
-                    return
-                }
-                do {
-                    let response = try decoder.decode(FlowStateResponse.self, from: data)
-                    DispatchQueue.main.async {
-                        guard let self else { return }
-                        DriftSessionState.shared.lastServerInFlow = response.isInFlow
-                        if let hrv = Self.extractHrvMs(from: body) {
-                            WellnessHistoryStore.shared.append(
-                                hrvSDNN: hrv,
-                                serverInFlow: response.isInFlow,
-                                localStressScore: HealthKitManager.shared.lastLocalStressScore,
-                                source: (body["device_id"] as? String) ?? "api"
-                            )
-                        }
-                        completion?(.success(response))
-                        if response.isInFlow {
-                            self.onFlowStateRestored?()
-                        } else {
-                            self.onFlowStateLost?()
-                        }
-                    }
-                } catch {
-                    DispatchQueue.main.async { completion?(.failure(error)) }
-                }
-            }
-            task.resume()
+    @MainActor
+    private static func applyFlowResponse(
+        _ response: FlowStateResponse,
+        body: [String: Any],
+        completion: ((Result<FlowStateResponse, Error>) -> Void)?
+    ) {
+        DriftSessionState.shared.lastServerInFlow = response.isInFlow
+        if let hrv = extractHrvMs(from: body) {
+            WellnessHistoryStore.shared.append(
+                hrvSDNN: hrv,
+                serverInFlow: response.isInFlow,
+                localStressScore: HealthKitManager.shared.lastLocalStressScore,
+                source: (body["device_id"] as? String) ?? "api"
+            )
+        }
+        completion?(.success(response))
+        if response.isInFlow {
+            APIClient.shared.onFlowStateRestored?()
+        } else {
+            APIClient.shared.onFlowStateLost?()
         }
     }
 
@@ -196,7 +199,6 @@ private struct OAuthExchangeBody: Encodable {
 }
 
 enum APIClientError: Error {
-    case noData
     case unauthorized
     case httpStatus(Int, String)
 }

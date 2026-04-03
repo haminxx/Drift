@@ -11,6 +11,8 @@ The repo includes **`Drift.xcodeproj`** so you can **double-click or File → Op
 
 You should see **Splash → Continue →** main tabs (**Home**, **Flow**, **Lock**, **Insight**).
 
+If install fails with **missing or invalid CFBundleExecutable**, clean and rebuild (**Product → Clean Build Folder**, then Run). The bundled `Info.plist` includes `CFBundleExecutable` and `INFOPLIST_PREPROCESS` so Xcode expands `$(EXECUTABLE_NAME)`.
+
 ### Exact paths (after you clone the repo)
 
 If the repo lives at `~/Projects/Drift` on your Mac:
