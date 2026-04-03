@@ -1,50 +1,59 @@
 # Drift iOS + watchOS
 
-Swift source files are in place. Create the Xcode project as follows (or open an existing one and add these files).
+## Open in Xcode (macOS required)
 
-## 1. Create a new Xcode project
+The repo includes **`Drift.xcodeproj`** so you can **double-click or File → Open** and press **Run** on an iPhone simulator.
 
-1. File → New → Project.
-2. Choose **App** (iOS); Product Name: **Drift**; Interface: SwiftUI; Language: Swift.
-3. Save inside this `ios` folder (so the project is `ios/Drift.xcodeproj`).
-4. Add a Watch App: File → New → Target → **Watch App** → name it **Drift Watch App**; finish.
+1. Use a **Mac** with Xcode 15+ (iOS Simulator does not run on Windows).
+2. Open **`ios/Drift.xcodeproj`**.
+3. Select the **Drift** scheme and an **iPhone** simulator (e.g. iPhone 16).
+4. **Product → Run** (⌘R).
 
-## 2. Replace / add files
+You should see **Splash → Continue →** main tabs (**Home**, **Flow**, **Lock**, **Insight**).
 
-- Replace the default `DriftApp.swift` with the one in `Drift/DriftApp.swift` (or copy its contents).
-- Add the `Drift/Managers`, `Drift/Models`, `Drift/Views`, and `Drift/Views/Components` folders to the **Drift** (iOS) target.
-- Link the **Charts** framework (iOS 16+): select the Drift target → General → Frameworks → **+** → **Charts.framework** (or add via **Build Phases → Link Binary**). Set **Minimum Deployment** to iOS 16 if you use `WellnessTrendChartView`.
-- Add the `Drift Watch App/` folder contents to the **Drift Watch App** target (Managers, Models, DriftWatchApp.swift, Info.plist).
-- Use the provided `Info.plist` for both targets or merge keys into the targets’ Info tabs.
+### Regenerating the Xcode project
 
-## 3. Capabilities (Signing & Capabilities)
+If you add or remove Swift files and Xcode shows missing files, regenerate `project.pbxproj`:
 
-- **Drift Watch App**: HealthKit, Background Modes → Workout.
-- **Drift (iOS)**: HealthKit (for Garmin/Apple Health pipeline), Time-Sensitive Notifications, Family Controls.
+```bash
+cd ios
+python3 tools/generate_pbxproj.py
+```
 
-See repo root `docs/ENTITLEMENTS.md` for Info.plist keys and steps.
+Alternatively, on a Mac with [XcodeGen](https://github.com/yonaskolb/XcodeGen) installed:
 
-## 4. Backend URL
+```bash
+brew install xcodegen
+cd ios
+xcodegen generate
+```
 
-Set `APIClient.shared.baseURL` from a config plist or build setting. For development: use `http://localhost:8000` (Simulator) or `http://<your-Mac-LAN-IP>:8000` (device on same Wi‑Fi). A Render (or other public) URL is only needed when the app cannot reach your machine (e.g. on cellular).
+The committed **`project.yml`** is the source of truth for XcodeGen; **`tools/generate_pbxproj.py`** produces an equivalent project without Homebrew.
 
-## 5. Family Controls
+**Note:** `Drift.xcscheme` references target IDs from the generated `project.pbxproj`. If you regenerate the project and Xcode loses the scheme, pick **Drift** as the run target again or re-run the Python generator (IDs are deterministic).
 
-Open **Brick mode & breaks** from the home toolbar (slider icon). Request Screen Time access, then use **FamilyActivityPicker** for **apps to block** and **essentials** (always allowed). Saved tokens live on `ShieldManager` (`blockedApplicationTokens`, `essentialApplicationTokens`; effective shield = blocked − essential).
+## Capabilities (Signing & Capabilities)
 
-## Folder layout (reference)
+After the project opens, enable capabilities per target (see repo **`docs/ENTITLEMENTS.md`**):
+
+- **Drift (iOS):** HealthKit, Time-Sensitive Notifications, Family Controls (for shields / app picker).
+- **Drift Watch App:** HealthKit, Background Modes → Workout.
+
+## Backend URL
+
+Set `APIClient.shared.baseURL` (or a build setting / plist) for your FastAPI server. Simulator can use `http://localhost:8000`; a physical iPhone on Wi‑Fi needs your Mac’s LAN IP.
+
+## Family Controls (Lock tab)
+
+Use **Apps & Screen Time** in the Lock tab to authorize Screen Time and choose apps to block; tokens are stored on `ShieldManager`.
+
+## Folder layout
 
 ```
 ios/
-  Drift.xcodeproj
-  Drift/
-    DriftApp.swift
-    Managers/
-    Models/
-    Info.plist
-  Drift Watch App/
-    DriftWatchApp.swift
-    Managers/
-    Models/
-    Info.plist
+  Drift.xcodeproj/          ← open this
+  project.yml               ← XcodeGen spec
+  tools/generate_pbxproj.py ← regenerate project.pbxproj
+  Drift/                    ← iOS app sources, Info.plist, Assets, Localizable.xcstrings
+  Drift Watch App/          ← watchOS app
 ```

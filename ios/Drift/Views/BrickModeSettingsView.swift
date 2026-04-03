@@ -11,7 +11,6 @@ import FamilyControls
 
 struct BrickModeSettingsView: View {
     @Environment(\.dismiss) private var dismiss
-    @ObservedObject private var prefs = UserPreferencesStore.shared
 
     @State private var blockedSelection = FamilyActivitySelection()
     @State private var essentialSelection = FamilyActivitySelection()
@@ -23,17 +22,9 @@ struct BrickModeSettingsView: View {
         NavigationStack {
             Form {
                 Section {
-                    Text("Choose how long your stress break runs and how long you get as a warning before apps lock from the server flow check.")
+                    Text("Break length and warning timers are on the Lock tab. Here, authorize Screen Time and choose which apps to block or always allow.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
-                }
-                Section("Break & warning") {
-                    Stepper(value: breakMinutesBinding, in: 1 ... 120) {
-                        Text("Stress / brick break: \(prefs.breakBrickMinutes) min")
-                    }
-                    Stepper(value: warningMinutesBinding, in: 1 ... 60) {
-                        Text("Warning before app lock: \(prefs.warningBeforeShieldMinutes) min")
-                    }
                 }
                 Section("Screen Time") {
                     Button("Request Screen Time access") {
@@ -80,7 +71,7 @@ struct BrickModeSettingsView: View {
                     .fontWeight(.semibold)
                 }
             }
-            .navigationTitle("Brick mode & breaks")
+            .navigationTitle("Apps & Screen Time")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close") { dismiss() }
@@ -109,19 +100,5 @@ struct BrickModeSettingsView: View {
                 }
             }
         }
-    }
-
-    private var breakMinutesBinding: Binding<Int> {
-        Binding(
-            get: { prefs.breakBrickMinutes },
-            set: { prefs.setBreakBrickMinutes($0) }
-        )
-    }
-
-    private var warningMinutesBinding: Binding<Int> {
-        Binding(
-            get: { prefs.warningBeforeShieldMinutes },
-            set: { prefs.setWarningBeforeShieldMinutes($0) }
-        )
     }
 }

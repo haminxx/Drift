@@ -33,6 +33,8 @@ final class FlowStateManager: ObservableObject {
 
     private var breakTimerTask: Task<Void, Never>?
     private var lastStressTriggerAt: Date?
+    /// First time HRV looked like "flow" while waiting to unlock; used with unlockRequiredFlowMinutes.
+    private var sustainedFlowStartedAt: Date?
 
     private init() {}
 
@@ -59,24 +61,40 @@ final class FlowStateManager: ObservableObject {
 
         switch level {
         case .stressed:
+            if dashboardStatus == .waitingForFlow {
+                sustainedFlowStartedAt = nil
+            }
             if dashboardStatus != .breakTime, dashboardStatus != .waitingForFlow {
                 enterStressedPath()
             }
         case .flow:
             if dashboardStatus == .waitingForFlow {
-                completeRecoveryUnlock()
-            }
-            if dashboardStatus != .breakTime {
+                considerSustainedFlowUnlock()
+            } else if dashboardStatus != .breakTime {
                 dashboardStatus = .inFlow
+                sustainedFlowStartedAt = nil
             }
         case .unknown:
             break
         }
     }
 
+    private func considerSustainedFlowUnlock() {
+        let required = UserPreferencesStore.shared.unlockRequiredFlowDuration
+        let now = Date()
+        if sustainedFlowStartedAt == nil {
+            sustainedFlowStartedAt = now
+        }
+        guard let start = sustainedFlowStartedAt else { return }
+        if now.timeIntervalSince(start) >= required {
+            completeRecoveryUnlock()
+        }
+    }
+
     private func enterStressedPath() {
         if let last = lastStressTriggerAt, Date().timeIntervalSince(last) < 30 { return }
         lastStressTriggerAt = Date()
+        sustainedFlowStartedAt = nil
         dashboardStatus = .stressed
         postStressBreakNotification()
         ShieldManager.shared.applyShields()
@@ -99,6 +117,7 @@ final class FlowStateManager: ObservableObject {
                     self.breakRemainingSeconds = remaining
                     if remaining <= 0 {
                         self.dashboardStatus = .waitingForFlow
+                        self.sustainedFlowStartedAt = nil
                         self.breakTimerTask?.cancel()
                         self.breakTimerTask = nil
                     }
@@ -112,6 +131,7 @@ final class FlowStateManager: ObservableObject {
         breakTimerTask?.cancel()
         breakTimerTask = nil
         breakRemainingSeconds = 0
+        sustainedFlowStartedAt = nil
         ShieldManager.shared.removeShields()
         flowScore += 1
         dashboardStatus = .inFlow

@@ -1,0 +1,65 @@
+# XcodeGen — generate Drift.xcodeproj on a Mac:
+#   brew install xcodegen && cd ios && xcodegen generate
+#
+# Windows/Linux: use tools/generate_pbxproj.py instead (committed pbxproj is the default).
+
+name: Drift
+options:
+  bundleIdPrefix: com.drift
+  deploymentTarget:
+    iOS: "16.0"
+    watchOS: "10.0"
+  developmentLanguage: en
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    CODE_SIGN_STYLE: Automatic
+
+targets:
+  Drift:
+    type: application
+    platform: iOS
+    sources:
+      - path: Drift
+        excludes:
+          - "**/.DS_Store"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.drift.Drift
+        INFOPLIST_FILE: Drift/Info.plist
+        IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_EMIT_LOC_STRINGS: YES
+        GENERATE_INFOPLIST_FILE: NO
+        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "1.0"
+    dependencies:
+      - sdk: Charts.framework
+      - sdk: FamilyControls.framework
+      - sdk: ManagedSettings.framework
+      - sdk: HealthKit.framework
+      - sdk: WatchConnectivity.framework
+      - sdk: UserNotifications.framework
+      - sdk: AuthenticationServices.framework
+      - target: DriftWatchApp
+        embed: true
+
+  DriftWatchApp:
+    type: application
+    platform: watchOS
+    sources:
+      - path: "Drift Watch App"
+        excludes:
+          - "**/.DS_Store"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.drift.Drift.watchkitapp
+        INFOPLIST_FILE: "Drift Watch App/Info.plist"
+        WATCHOS_DEPLOYMENT_TARGET: "10.0"
+        SKIP_INSTALL: YES
+        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "1.0"
+    dependencies:
+      - sdk: WatchConnectivity.framework
+      - sdk: HealthKit.framework

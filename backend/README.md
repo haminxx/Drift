@@ -10,7 +10,7 @@
    - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
    - **Plan**: Free (or paid to avoid spin-down).
 
-4. **Environment**: Render sets `PORT` automatically. For Firebase (Auth + Firestore), add:
+4. **Environment**: Render sets `PORT` automatically. For optional **Fitbit / Garmin OAuth**, add the variables listed in [docs/INTEGRATIONS.md](../docs/INTEGRATIONS.md) (`FITBIT_CLIENT_ID`, `TOKEN_ENCRYPTION_KEY`, etc.). For Firebase (Auth + Firestore), add:
    - **GOOGLE_APPLICATION_CREDENTIALS_JSON**: paste the **contents** of your Firebase service account JSON key (from Firebase Console → Project Settings → Service accounts → Generate new private key). Mark as secret. The backend uses this to verify tokens and read/write Firestore.
 
 5. **Deploy**: After the first deploy, note the URL (e.g. `https://drift-backend.onrender.com`). Set this as the backend base URL in the iOS app (e.g. `APIClient.shared.baseURL` or a config plist).

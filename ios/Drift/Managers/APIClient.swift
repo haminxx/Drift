@@ -24,12 +24,28 @@ final class APIClient: ObservableObject {
         return d
     }()
 
+    private let encoder: JSONEncoder = {
+        let e = JSONEncoder()
+        e.keyEncodingStrategy = .convertToSnakeCase
+        return e
+    }()
+
     /// When flow state is false, this is called so ShieldTimerManager can start the 5-min timer and post notification.
     var onFlowStateLost: (() -> Void)?
     /// When flow state is true again, call so ShieldManager can remove shield and timer can cancel.
     var onFlowStateRestored: (() -> Void)?
 
     private init() {}
+
+    /// Builds `baseURL/api/v1/...` with correct path segments (avoids encoding slashes as one component).
+    private func apiURL(path: String) -> URL {
+        let trimmed = path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+        var url = baseURL
+        for part in trimmed.split(separator: "/") {
+            url = url.appendingPathComponent(String(part))
+        }
+        return url
+    }
 
     private static func extractHrvMs(from body: [String: Any]) -> Double? {
         guard let readings = body["readings"] as? [[String: Any]],
@@ -53,7 +69,7 @@ final class APIClient: ObservableObject {
 
     /// POST request body (readings + optional device_id, session_id) to /api/v1/hrv_stream.
     func postHRVStream(body: [String: Any], completion: ((Result<FlowStateResponse, Error>) -> Void)? = nil) {
-        let url = baseURL.appendingPathComponent("api/v1/hrv_stream")
+        let url = apiURL(path: "api/v1/hrv_stream")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -98,8 +114,87 @@ final class APIClient: ObservableObject {
             task.resume()
         }
     }
+
+    // MARK: - Wearable OAuth (Fitbit / Garmin; server-stored tokens)
+
+    func fetchWearableProviders() async throws -> [WearableProviderInfo] {
+        let url = apiURL(path: "api/v1/wearables/providers")
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        let (data, response) = try await session.data(for: request)
+        try throwIfHTTPError(data: data, response: response)
+        return try decoder.decode([WearableProviderInfo].self, from: data)
+    }
+
+    func fetchFitbitAuthorizeURL() async throws -> WearableAuthorizeResponse {
+        try await authorizedGET(path: "api/v1/wearables/oauth/fitbit/authorize-url", as: WearableAuthorizeResponse.self)
+    }
+
+    func fetchGarminAuthorizeURL() async throws -> WearableAuthorizeResponse {
+        try await authorizedGET(path: "api/v1/wearables/oauth/garmin/authorize-url", as: WearableAuthorizeResponse.self)
+    }
+
+    func exchangeFitbitOAuth(code: String, state: String, redirectUri: String) async throws -> WearableExchangeResponse {
+        try await authorizedPOST(
+            path: "api/v1/wearables/oauth/fitbit/exchange",
+            body: OAuthExchangeBody(code: code, state: state, redirectUri: redirectUri),
+            as: WearableExchangeResponse.self
+        )
+    }
+
+    func exchangeGarminOAuth(code: String, state: String, redirectUri: String) async throws -> WearableExchangeResponse {
+        try await authorizedPOST(
+            path: "api/v1/wearables/oauth/garmin/exchange",
+            body: OAuthExchangeBody(code: code, state: state, redirectUri: redirectUri),
+            as: WearableExchangeResponse.self
+        )
+    }
+
+    private func authorizedGET<T: Decodable>(path: String, as type: T.Type) async throws -> T {
+        let url = apiURL(path: path)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        guard let provider = authTokenProvider, let token = await provider() else {
+            throw APIClientError.unauthorized
+        }
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        let (data, response) = try await session.data(for: request)
+        try throwIfHTTPError(data: data, response: response)
+        return try decoder.decode(T.self, from: data)
+    }
+
+    private func authorizedPOST<T: Decodable, B: Encodable>(path: String, body: B, as type: T.Type) async throws -> T {
+        let url = apiURL(path: path)
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try encoder.encode(body)
+        guard let provider = authTokenProvider, let token = await provider() else {
+            throw APIClientError.unauthorized
+        }
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        let (data, response) = try await session.data(for: request)
+        try throwIfHTTPError(data: data, response: response)
+        return try decoder.decode(T.self, from: data)
+    }
+
+    private func throwIfHTTPError(data: Data, response: URLResponse) throws {
+        guard let http = response as? HTTPURLResponse else { return }
+        guard (200 ... 299).contains(http.statusCode) else {
+            let msg = String(data: data, encoding: .utf8) ?? "HTTP \(http.statusCode)"
+            throw APIClientError.httpStatus(http.statusCode, msg)
+        }
+    }
+}
+
+private struct OAuthExchangeBody: Encodable {
+    let code: String
+    let state: String
+    let redirectUri: String
 }
 
 enum APIClientError: Error {
     case noData
+    case unauthorized
+    case httpStatus(Int, String)
 }

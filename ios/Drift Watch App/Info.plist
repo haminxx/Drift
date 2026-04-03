@@ -25,6 +25,6 @@
 		<string>workout-processing</string>
 	</array>
 	<key>WKCompanionAppBundleIdentifier</key>
-	<string>$(DEVELOPMENT_TEAM).drift</string>
+	<string>com.drift.Drift</string>
 </dict>
 </plist>

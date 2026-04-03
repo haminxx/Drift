@@ -55,12 +55,14 @@ struct SplashView: View {
 
     private var revealedContent: some View {
         VStack(spacing: 32) {
-            Text("drift")
+            Text(String(localized: "app.name"))
                 .font(.system(size: 42, weight: .light, design: .rounded))
                 .foregroundStyle(glassyTitleStyle)
                 .scaleEffect(pulseScale)
-            Button("Continue") {
+            Button {
                 onContinue()
+            } label: {
+                Text(String(localized: "splash.continue"))
             }
             .font(.headline)
             .foregroundStyle(revealBackground == .black ? .white : .primary)
@@ -98,12 +100,6 @@ struct SplashView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.2) {
             withAnimation {
                 phase = .stage3
-            }
-        }
-        // Auto-continue after 1.5 s on stage 3 (optional; user can tap Continue earlier)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-            if phase == .stage3 {
-                onContinue()
             }
         }
     }

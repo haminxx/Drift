@@ -1,0 +1,553 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AE400E898FEF30F40BC36D74 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEFD2F95A0B84075A33A372; };
+		F64E58923A24381997E5CE65 /* DriftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDF41922DA32249BCD46D55; };
+		684A5304498CF1A3AB837F11 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A238A07A060DC65715A7D22C; };
+		E9DBAA0DE6A89B3479161DF6 /* DriftSessionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066B036EE2633E04753FD754; };
+		C134A67A6FC6B05DCC1A2AE3 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC0BC51D54B582767F61680; };
+		4FACAAE19B0257654FD3A7B1 /* FlowStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496CAF5B3DFDC89DA449B39; };
+		F0C5D789645002796FB354B1 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF5F2E28DB1C062637B612DE; };
+		4C73441CFBAC7BCB7862C5AF /* ShieldManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60689BE553BA72F6B0A9859D; };
+		430DF53B68A693260E20A233 /* ShieldTimerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34B2BFF3866FAFFCC72B2DD; };
+		1DC9234EDE4CC44589D31D57 /* UserPreferencesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6253A6B6AA0D319A0E27382; };
+		F8B16DFFE40D24FB0454A4F8 /* WatchConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2DD4F4F40FDCB43DAA2217; };
+		5DA87B982B603CB45EF68988 /* WearableOAuthCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87908126DD15CACE0A7093B0; };
+		15F5528101736487F8556E6A /* WellnessHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87DD9917BA3D1E3D1938541; };
+		4C93E5E3BF7F8B0EC1953BBB /* FlowStateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636FE39FAB323E34B49E63F3; };
+		1B1D9E96F77F0FBFEECFD53A /* HRVPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077900EC19A430FDF5FB7483; };
+		BAF0C13A196BD04ADC5CD39C /* WearableOAuthModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA6431F895E7B82692660EC; };
+		954694BF366FF87C7D9CB1D0 /* WellnessSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D958696A313BB75DEDA1A41; };
+		3B56BC1706D788F85C01AF4D /* BrickModeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E16D054873D1B6BB3D5BD30; };
+		152A5875F81BB03765457B5A /* DriftColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28823749E022189F6990F02A; };
+		F6FB8A9934CB0F10E0FFCFBF /* GlassGradientBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9953054925ACD6007A8BCA; };
+		1B6196D66C0E0886162CFE16 /* SummaryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4DC66E5FA4944E49E9E755; };
+		AD6DBFA7656B576AF0458448 /* FlowAnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ABD78DA33153A0758DEDE7; };
+		6D393BF1556CEEC74A074307 /* HomeSereneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E79068DE29C92290E3B093E; };
+		5AD5CDDCBC392F03A4A7A438 /* InsightFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9525026B369CCE0C497012D0; };
+		A7016A79A03E4ED7A886FCA2 /* LockHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6635DA3EDBA6CB90AFE876C6; };
+		4487E26BC9A056824FACAF5A /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651EB6E009DB5FA359B6F7E7; };
+		B26CA2B321BFE9CB88FF97C4 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81639EF00B1E537F035E65C; };
+		2ED36F40088483A25591408F /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03CD453E8EABFE03D104BA3 /* Charts.framework */; };
+		A5A1DADAA726AA70DB8C94A9 /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12321C6BA42C266AD7BDB3D /* FamilyControls.framework */; };
+		0499F72E4DBF51B88344C691 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 978AAB1D7616022623B1DABA /* ManagedSettings.framework */; };
+		5D37BC2905CE5EB205761B67 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 190D2A0A0BE0AFD3B79B8BC6 /* HealthKit.framework */; };
+		E8C828B100DD429B91905DA8 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AEBD519C5B6586BFCE49F93 /* WatchConnectivity.framework */; };
+		EFB790018DB0EE550EB62E83 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70607F77CF22CD1F159C7BD7 /* UserNotifications.framework */; };
+		D21AE9F49DB6642F42823FA5 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B73DD260E0A50D7FA67E7C2B /* AuthenticationServices.framework */; };
+		B311842FCB6394953AA62851 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 151EDD20B192A6682C08E3A7 /* Assets.xcassets */; };
+		24775113A57477D8F569CD16 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 605E70FA682E9FC8A22AFEEC /* Localizable.xcstrings */; };
+		9557B46D6BF9AE34BDA8DF13 /* DriftWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB37888FAF0BDB2D79B3A09D; };
+		28A4406FC9F0EBC7E2E44905 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56DD0449181FFAC01BC2BC93; };
+		E2D12E8C50D6F817B3776BA7 /* WatchConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EDB9B6F8A2D04F747FBE80; };
+		87BD9C99E5A6637713924B17 /* HRVPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69707272AAE7FCD42057098F; };
+		BBC16F6D60F900788AC05BF3 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AEBD519C5B6586BFCE49F93 /* WatchConnectivity.framework */; };
+		8356C5590660332B4C955292 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 190D2A0A0BE0AFD3B79B8BC6 /* HealthKit.framework */; };
+		C4A9EFC52321B38CE663562A /* Drift Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = D71D7FC57C00B9EA6805B3C7 /* Drift Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		42E90A9BD859EA2BC93FC701 /* Drift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Drift.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D71D7FC57C00B9EA6805B3C7 /* Drift Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Drift Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DEFD2F95A0B84075A33A372 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView.swift"; sourceTree = "<group>"; };
+		FCDF41922DA32249BCD46D55 /* DriftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DriftApp.swift"; sourceTree = "<group>"; };
+		A238A07A060DC65715A7D22C /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIClient.swift"; sourceTree = "<group>"; };
+		066B036EE2633E04753FD754 /* DriftSessionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DriftSessionState.swift"; sourceTree = "<group>"; };
+		AEC0BC51D54B582767F61680 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirebaseManager.swift"; sourceTree = "<group>"; };
+		6496CAF5B3DFDC89DA449B39 /* FlowStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlowStateManager.swift"; sourceTree = "<group>"; };
+		AF5F2E28DB1C062637B612DE /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HealthKitManager.swift"; sourceTree = "<group>"; };
+		60689BE553BA72F6B0A9859D /* ShieldManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShieldManager.swift"; sourceTree = "<group>"; };
+		C34B2BFF3866FAFFCC72B2DD /* ShieldTimerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShieldTimerManager.swift"; sourceTree = "<group>"; };
+		E6253A6B6AA0D319A0E27382 /* UserPreferencesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserPreferencesStore.swift"; sourceTree = "<group>"; };
+		5A2DD4F4F40FDCB43DAA2217 /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WatchConnectivityManager.swift"; sourceTree = "<group>"; };
+		87908126DD15CACE0A7093B0 /* WearableOAuthCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WearableOAuthCoordinator.swift"; sourceTree = "<group>"; };
+		C87DD9917BA3D1E3D1938541 /* WellnessHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WellnessHistoryStore.swift"; sourceTree = "<group>"; };
+		636FE39FAB323E34B49E63F3 /* FlowStateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlowStateResponse.swift"; sourceTree = "<group>"; };
+		077900EC19A430FDF5FB7483 /* HRVPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HRVPayload.swift"; sourceTree = "<group>"; };
+		9DA6431F895E7B82692660EC /* WearableOAuthModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WearableOAuthModels.swift"; sourceTree = "<group>"; };
+		9D958696A313BB75DEDA1A41 /* WellnessSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WellnessSample.swift"; sourceTree = "<group>"; };
+		5E16D054873D1B6BB3D5BD30 /* BrickModeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrickModeSettingsView.swift"; sourceTree = "<group>"; };
+		60ABD78DA33153A0758DEDE7 /* FlowAnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlowAnalyticsView.swift"; sourceTree = "<group>"; };
+		3E79068DE29C92290E3B093E /* HomeSereneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeSereneView.swift"; sourceTree = "<group>"; };
+		9525026B369CCE0C497012D0 /* InsightFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InsightFeedView.swift"; sourceTree = "<group>"; };
+		6635DA3EDBA6CB90AFE876C6 /* LockHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LockHubView.swift"; sourceTree = "<group>"; };
+		651EB6E009DB5FA359B6F7E7 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainTabView.swift"; sourceTree = "<group>"; };
+		B81639EF00B1E537F035E65C /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SplashView.swift"; sourceTree = "<group>"; };
+		28823749E022189F6990F02A /* DriftColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DriftColorPalette.swift"; sourceTree = "<group>"; };
+		BB9953054925ACD6007A8BCA /* GlassGradientBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GlassGradientBackground.swift"; sourceTree = "<group>"; };
+		EA4DC66E5FA4944E49E9E755 /* SummaryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SummaryCardView.swift"; sourceTree = "<group>"; };
+		BB37888FAF0BDB2D79B3A09D /* DriftWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DriftWatchApp.swift"; sourceTree = "<group>"; };
+		56DD0449181FFAC01BC2BC93 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HealthKitManager.swift"; sourceTree = "<group>"; };
+		B6EDB9B6F8A2D04F747FBE80 /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WatchConnectivityManager.swift"; sourceTree = "<group>"; };
+		69707272AAE7FCD42057098F /* HRVPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HRVPayload.swift"; sourceTree = "<group>"; };
+		151EDD20B192A6682C08E3A7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		605E70FA682E9FC8A22AFEEC /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		B73DD260E0A50D7FA67E7C2B /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
+		B03CD453E8EABFE03D104BA3 /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = System/Library/Frameworks/Charts.framework; sourceTree = SDKROOT; };
+		C12321C6BA42C266AD7BDB3D /* FamilyControls.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FamilyControls.framework; path = System/Library/Frameworks/FamilyControls.framework; sourceTree = SDKROOT; };
+		190D2A0A0BE0AFD3B79B8BC6 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		978AAB1D7616022623B1DABA /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
+		70607F77CF22CD1F159C7BD7 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		8AEBD519C5B6586BFCE49F93 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5725ED6D6519BE68AB5BD620 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2ED36F40088483A25591408F,
+				A5A1DADAA726AA70DB8C94A9,
+				0499F72E4DBF51B88344C691,
+				5D37BC2905CE5EB205761B67,
+				E8C828B100DD429B91905DA8,
+				EFB790018DB0EE550EB62E83,
+				D21AE9F49DB6642F42823FA5,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C2F87B197D338925BCE6F276 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BBC16F6D60F900788AC05BF3,
+				8356C5590660332B4C955292,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B062AAB18DA441EE8F8137D9 /* Drift */ = {
+			isa = PBXGroup;
+			children = (
+				614CCD9BD2A9AF199CC8BCD4,
+				45EA3018161B134E1981FC65,
+				29FF6C946CB55FD1F3AF5DEF,
+				4DEFD2F95A0B84075A33A372,
+				FCDF41922DA32249BCD46D55,
+				151EDD20B192A6682C08E3A7,
+				605E70FA682E9FC8A22AFEEC,
+			);
+			path = "Drift";
+			sourceTree = "<group>";
+		};
+		614CCD9BD2A9AF199CC8BCD4 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				A238A07A060DC65715A7D22C,
+				066B036EE2633E04753FD754,
+				AEC0BC51D54B582767F61680,
+				6496CAF5B3DFDC89DA449B39,
+				AF5F2E28DB1C062637B612DE,
+				60689BE553BA72F6B0A9859D,
+				C34B2BFF3866FAFFCC72B2DD,
+				E6253A6B6AA0D319A0E27382,
+				5A2DD4F4F40FDCB43DAA2217,
+				87908126DD15CACE0A7093B0,
+				C87DD9917BA3D1E3D1938541,
+			);
+			path = "Managers";
+			sourceTree = "<group>";
+		};
+		45EA3018161B134E1981FC65 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				636FE39FAB323E34B49E63F3,
+				077900EC19A430FDF5FB7483,
+				9DA6431F895E7B82692660EC,
+				9D958696A313BB75DEDA1A41,
+			);
+			path = "Models";
+			sourceTree = "<group>";
+		};
+		29FF6C946CB55FD1F3AF5DEF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				332D38999D2A5575F788297D,
+				5E16D054873D1B6BB3D5BD30,
+				60ABD78DA33153A0758DEDE7,
+				3E79068DE29C92290E3B093E,
+				9525026B369CCE0C497012D0,
+				6635DA3EDBA6CB90AFE876C6,
+				651EB6E009DB5FA359B6F7E7,
+				B81639EF00B1E537F035E65C,
+			);
+			path = "Views";
+			sourceTree = "<group>";
+		};
+		332D38999D2A5575F788297D /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				28823749E022189F6990F02A,
+				BB9953054925ACD6007A8BCA,
+				EA4DC66E5FA4944E49E9E755,
+			);
+			path = "Components";
+			sourceTree = "<group>";
+		};
+		78C1A616742DDFAAC1609524 /* Drift Watch App */ = {
+			isa = PBXGroup;
+			children = (
+				5B0B3B3D22AB204A219AD9CA,
+				A15A82E95D202DB6F61C37A4,
+				BB37888FAF0BDB2D79B3A09D,
+			);
+			path = "Drift Watch App";
+			sourceTree = "<group>";
+		};
+		5B0B3B3D22AB204A219AD9CA /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				56DD0449181FFAC01BC2BC93,
+				B6EDB9B6F8A2D04F747FBE80,
+			);
+			path = "Managers";
+			sourceTree = "<group>";
+		};
+		A15A82E95D202DB6F61C37A4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				69707272AAE7FCD42057098F,
+			);
+			path = "Models";
+			sourceTree = "<group>";
+		};
+		5BAB63C60BF318DAB40A4F04 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				42E90A9BD859EA2BC93FC701,
+				D71D7FC57C00B9EA6805B3C7,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0035FE99EA2940F7FA633A58 = {
+			isa = PBXGroup;
+			children = (
+				B062AAB18DA441EE8F8137D9,
+				78C1A616742DDFAAC1609524,
+				5BAB63C60BF318DAB40A4F04,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B5B8A39DA834F1D2671082B2 /* Drift */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0C9C0B0EDFA7FD30AE977BE1 /* Build configuration list for PBXNativeTarget "Drift" */;
+			buildPhases = (
+				1B75C15217C826A3AA4B589E /* Sources */,
+				5725ED6D6519BE68AB5BD620 /* Frameworks */,
+				D2582033BD58D5A55665376B /* Resources */,
+				774CFB3859E0A3607FEBDD5F /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7F65BC354D678C2C88568DE3 /* PBXTargetDependency */,
+			);
+			name = Drift;
+			productName = Drift;
+			productReference = 42E90A9BD859EA2BC93FC701 /* Drift.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B3FB35DB52F989FB87F002E5 /* Drift Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5D0E8D2D277AE98A469C7C95 /* Build configuration list for PBXNativeTarget "Drift Watch App" */;
+			buildPhases = (
+				A9F1B2235408C4DA199F713D /* Sources */,
+				C2F87B197D338925BCE6F276 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Drift Watch App";
+			productName = "Drift Watch App";
+			productReference = D71D7FC57C00B9EA6805B3C7 /* Drift Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EC553E7FBC3AD0AD7AB94BDF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					B5B8A39DA834F1D2671082B2 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					B3FB35DB52F989FB87F002E5 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = F9ECB29C706A57371937D30A /* Build configuration list for PBXProject "Drift" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 0035FE99EA2940F7FA633A58;
+			productRefGroup = 5BAB63C60BF318DAB40A4F04 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B5B8A39DA834F1D2671082B2 /* Drift */,
+				B3FB35DB52F989FB87F002E5 /* Drift Watch App */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D2582033BD58D5A55665376B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B311842FCB6394953AA62851,
+				24775113A57477D8F569CD16,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1B75C15217C826A3AA4B589E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE400E898FEF30F40BC36D74,
+				F64E58923A24381997E5CE65,
+				684A5304498CF1A3AB837F11,
+				E9DBAA0DE6A89B3479161DF6,
+				C134A67A6FC6B05DCC1A2AE3,
+				4FACAAE19B0257654FD3A7B1,
+				F0C5D789645002796FB354B1,
+				4C73441CFBAC7BCB7862C5AF,
+				430DF53B68A693260E20A233,
+				1DC9234EDE4CC44589D31D57,
+				F8B16DFFE40D24FB0454A4F8,
+				5DA87B982B603CB45EF68988,
+				15F5528101736487F8556E6A,
+				4C93E5E3BF7F8B0EC1953BBB,
+				1B1D9E96F77F0FBFEECFD53A,
+				BAF0C13A196BD04ADC5CD39C,
+				954694BF366FF87C7D9CB1D0,
+				3B56BC1706D788F85C01AF4D,
+				152A5875F81BB03765457B5A,
+				F6FB8A9934CB0F10E0FFCFBF,
+				1B6196D66C0E0886162CFE16,
+				AD6DBFA7656B576AF0458448,
+				6D393BF1556CEEC74A074307,
+				5AD5CDDCBC392F03A4A7A438,
+				A7016A79A03E4ED7A886FCA2,
+				4487E26BC9A056824FACAF5A,
+				B26CA2B321BFE9CB88FF97C4,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9F1B2235408C4DA199F713D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9557B46D6BF9AE34BDA8DF13,
+				28A4406FC9F0EBC7E2E44905,
+				E2D12E8C50D6F817B3776BA7,
+				87BD9C99E5A6637713924B17,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		774CFB3859E0A3607FEBDD5F /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				C4A9EFC52321B38CE663562A /* Drift Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXContainerItemProxy section */
+		FD7100C950F38FABE523B955 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EC553E7FBC3AD0AD7AB94BDF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B3FB35DB52F989FB87F002E5;
+			remoteInfo = "Drift Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		7F65BC354D678C2C88568DE3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B3FB35DB52F989FB87F002E5 /* Drift Watch App */;
+			targetProxy = FD7100C950F38FABE523B955 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0589C37BBE72DE47B58CFEA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Drift/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks");
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.drift.Drift;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		89C204F61FBBABD825A2F026 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Drift/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks");
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.drift.Drift;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		2D8E4B449932D58429F6EA9B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Drift Watch App/Info.plist";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.drift.Drift.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		299D81593E645854017FE892 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Drift Watch App/Info.plist";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.drift.Drift.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		277EAB97121CC53ABE0029B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		C6A5F2575945655BDA71DB0C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf-with-dsym;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0C9C0B0EDFA7FD30AE977BE1 /* Build configuration list for PBXNativeTarget "Drift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0589C37BBE72DE47B58CFEA8,
+				89C204F61FBBABD825A2F026,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5D0E8D2D277AE98A469C7C95 /* Build configuration list for PBXNativeTarget "Drift Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D8E4B449932D58429F6EA9B,
+				299D81593E645854017FE892,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F9ECB29C706A57371937D30A /* Build configuration list for PBXProject "Drift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				277EAB97121CC53ABE0029B3,
+				C6A5F2575945655BDA71DB0C,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EC553E7FBC3AD0AD7AB94BDF /* Project object */;
+}

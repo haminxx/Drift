@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1 import hrv as hrv_router
 from app.api.v1 import summaries as summaries_router
+from app.api.v1 import wearable_oauth as wearable_router
 from app.core.firebase import init_firebase_if_configured, get_firebase_app
 
 
@@ -31,6 +32,7 @@ app.add_middleware(
 
 app.include_router(hrv_router.router, prefix="/api/v1")
 app.include_router(summaries_router.router, prefix="/api/v1")
+app.include_router(wearable_router.router, prefix="/api/v1")
 
 @app.get("/health")
 def health() -> dict:
