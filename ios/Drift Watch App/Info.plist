@@ -28,6 +28,8 @@
 	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
+	<key>WKApplication</key>
+	<true/>
 	<key>WKCompanionAppBundleIdentifier</key>
 	<string>com.drift.Drift</string>
 </dict>
