@@ -11,6 +11,20 @@ The repo includes **`Drift.xcodeproj`** so you can **double-click or File → Op
 
 You should see **Splash → Continue →** main tabs (**Home**, **Flow**, **Lock**, **Insight**).
 
+### Exact paths (after you clone the repo)
+
+If the repo lives at `~/Projects/Drift` on your Mac:
+
+| What | Path |
+|------|------|
+| **Open in Xcode** | `~/Projects/Drift/ios/Drift.xcodeproj` |
+| **iPhone app source (SwiftUI UI)** | `~/Projects/Drift/ios/Drift/` (e.g. `ContentView.swift`, `Views/`) |
+| **Watch app source** | `~/Projects/Drift/ios/Drift Watch App/` |
+
+**To test the main UI:** use scheme **Drift** and destination **iPhone 16** (or any **iPhone** simulator)—not the Watch. All primary screens (`SplashView`, `MainTabView`, `HomeSereneView`, etc.) live under `ios/Drift/`.
+
+**To test the Watch app:** scheme **Drift Watch App** and a **watchOS** simulator. The Watch target is companion code (HRV → iPhone); the full tab UI runs on **iOS**.
+
 ### Regenerating the Xcode project
 
 If you add or remove Swift files and Xcode shows missing files, regenerate `project.pbxproj`:

@@ -2,10 +2,9 @@
 //  HealthKitManager.swift
 //  Drift Watch App
 //
-//  Request HealthKit permissions for Heart Rate and HRV; start a mindfulness workout so the watch
-//  collects HR/HRV in the background; subscribe to new HRV samples and send each via WatchConnectivity.
-//  Entitlement: HealthKit capability, NSHealthShareUsageDescription / NSHealthUpdateUsageDescription,
-//  Background Modes → Workout.
+//  Request HealthKit permissions for Heart Rate and HRV; start a workout session so the watch
+//  samples HR/HRV in the background; subscribe to new HRV samples and send each via WatchConnectivity.
+//  Uses .mindAndBody for broad SDK compatibility (mindfulness type varies by OS version).
 //
 
 import Foundation
@@ -38,18 +37,21 @@ final class HealthKitManager: ObservableObject {
         }
     }
 
-    /// Start a mindfulness workout so the watch continues to sample HR/HRV in the background.
+    /// Start a workout session so the watch continues to sample HR/HRV in the background.
     private func startMindfulnessSession(completion: @escaping (Bool) -> Void) {
         let config = HKWorkoutConfiguration()
-        config.activityType = .mindfulness
+        // `.mindfulness` is not available on all watchOS SDKs; `.mindAndBody` is widely supported.
+        config.activityType = .mindAndBody
         config.locationType = .unknown
 
         do {
             workoutSession = try HKWorkoutSession(healthStore: store, configuration: config)
             workoutBuilder = workoutSession?.associatedWorkoutBuilder()
             workoutBuilder?.dataSource = HKLiveWorkoutDataSource(healthStore: store, workoutConfiguration: config)
-            workoutSession?.startActivity(with: Date())
-            workoutBuilder?.beginCollection(at: Date()) { [weak self] success, error in
+
+            let start = Date()
+            workoutSession?.startActivity(with: start)
+            workoutBuilder?.beginCollection(withStart: start) { [weak self] success, _ in
                 DispatchQueue.main.async {
                     completion(success)
                     if success {
@@ -70,19 +72,20 @@ final class HealthKitManager: ObservableObject {
             predicate: predicate,
             anchor: nil,
             limit: HKObjectQueryNoLimit
-        ) { [weak self] _, samples, _, _, error in
-            guard let samples = samples as? [HKQuantitySample] else { return }
-            for sample in samples {
-                self?.emitHRVPayload(sample: sample)
-            }
+        ) { [weak self] _, samples, _, _, _ in
+            self?.processHRVSamples(samples ?? [])
         }
         hrvQuery?.updateHandler = { [weak self] _, samples, _, _, _ in
-            guard let samples = samples else { return }
-            for sample in samples {
-                self?.emitHRVPayload(sample: sample)
-            }
+            self?.processHRVSamples(samples ?? [])
         }
         store.execute(hrvQuery!)
+    }
+
+    private func processHRVSamples(_ samples: [HKSample]) {
+        guard let quantitySamples = samples as? [HKQuantitySample] else { return }
+        for sample in quantitySamples {
+            emitHRVPayload(sample: sample)
+        }
     }
 
     private func emitHRVPayload(sample: HKQuantitySample) {
@@ -102,8 +105,9 @@ final class HealthKitManager: ObservableObject {
     }
 
     func stopSession() {
-        workoutBuilder?.endCollection(at: Date()) { [weak self] _, _ in
-            self?.workoutSession?.end(at: Date())
+        let end = Date()
+        workoutBuilder?.endCollection(withEnd: end) { [weak self] _, _ in
+            self?.workoutSession?.end()
             self?.workoutSession = nil
             self?.workoutBuilder = nil
         }
