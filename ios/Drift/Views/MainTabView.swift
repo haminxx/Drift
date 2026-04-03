@@ -2,18 +2,17 @@
 //  MainTabView.swift
 //  Drift
 //
-//  Four-tab shell with custom floating glass bottom bar (Home, Flow, Lock, Insight).
+//  Three-tab shell with floating glass bottom bar (Flow, Lock, Insight).
 //
 
 import SwiftUI
 import UIKit
 
 enum DriftMainTab: Int, CaseIterable {
-    case home, flow, lock, insight
+    case flow, lock, insight
 
     var title: String {
         switch self {
-        case .home: return String(localized: "tab.home")
         case .flow: return String(localized: "tab.flow")
         case .lock: return String(localized: "tab.lock")
         case .insight: return String(localized: "tab.insight")
@@ -22,7 +21,6 @@ enum DriftMainTab: Int, CaseIterable {
 
     var systemImage: String {
         switch self {
-        case .home: return "house.fill"
         case .flow: return "waveform.path.ecg"
         case .lock: return "lock.fill"
         case .insight: return "sparkles"
@@ -31,15 +29,13 @@ enum DriftMainTab: Int, CaseIterable {
 }
 
 struct MainTabView: View {
-    @State private var selectedTab: DriftMainTab = .home
+    @State private var selectedTab: DriftMainTab = .flow
     @Namespace private var tabSelectionNS
 
     var body: some View {
         ZStack(alignment: .bottom) {
             Group {
                 switch selectedTab {
-                case .home:
-                    HomeSereneView()
                 case .flow:
                     FlowAnalyticsView()
                 case .lock:
@@ -49,11 +45,11 @@ struct MainTabView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding(.bottom, 96)
+            .padding(.bottom, 88)
 
             FloatingGlassTabBar(selectedTab: $selectedTab, tabSelectionNS: tabSelectionNS)
                 .padding(.horizontal, 20)
-                .padding(.bottom, 8)
+                .padding(.bottom, 10)
         }
         .ignoresSafeArea(.keyboard)
     }

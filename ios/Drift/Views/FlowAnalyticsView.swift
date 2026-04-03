@@ -2,47 +2,21 @@
 //  FlowAnalyticsView.swift
 //  Drift
 //
-//  Ultrahuman-inspired dark analytics: Flow Index, 7-day bars, stage breakdown (mock), timeline chart.
+//  Flow “today” view: felt-time header, vertical timeline with soft glow blob, activity pills,
+//  and insight cards (glassmorphism, dark navy / purple mood).
 //
 
-import Charts
 import SwiftUI
 
-private enum FlowPalette {
-    static let deep = Color(red: 0.08, green: 0.32, blue: 0.36)
-    static let light = Color(red: 0.2, green: 0.55, blue: 0.58)
-    static let working = Color(red: 0.35, green: 0.7, blue: 0.55)
-    static let distracted = Color.white.opacity(0.55)
-    static let bgTop = Color(red: 0.06, green: 0.18, blue: 0.22)
-    static let bgBottom = Color.black
-}
-
-private struct FlowStageMock: Identifiable {
-    let id = UUID()
-    let name: String
-    let color: Color
-    let duration: String
-    let percent: Int
-}
-
-private struct FlowTimelineSegment: Identifiable {
-    let id = UUID()
-    let start: Date
-    let end: Date
-    let stage: String
-    let color: Color
-}
-
-private struct DailyFlowScore: Identifiable {
-    let id = UUID()
-    let day: Date
-    let score: Int
+private struct FlowActivityPin: Identifiable {
+    let id: String
+    let label: String
+    let yFraction: CGFloat
 }
 
 struct FlowAnalyticsView: View {
     @ObservedObject private var history = WellnessHistoryStore.shared
     @ObservedObject private var flow = FlowStateManager.shared
-    @ObservedObject private var session = DriftSessionState.shared
 
     private var flowIndex: Int {
         let cal = Calendar.current
@@ -55,255 +29,272 @@ struct FlowAnalyticsView: View {
             share = Double(ok) / Double(today.count)
         }
         let hrvPart = flow.hrvRelativeToBaseline
-        let serverBoost = (session.lastServerInFlow == true) ? 0.08 : 0.0
-        let blended = (share * 0.5 + hrvPart * 0.42 + serverBoost) * 100
+        let blended = (share * 0.5 + hrvPart * 0.42) * 100
         return min(100, max(18, Int(blended.rounded())))
     }
 
-    private var mockStages: [FlowStageMock] {
+    /// Subjective “felt” hours (derived from flow index).
+    private var feltLikeHours: Double {
+        2.0 + Double(flowIndex) / 100.0 * 6.5
+    }
+
+    /// Wall time since 7:00 today (for “It’s been … hours”).
+    private var elapsedHours: Double {
+        let cal = Calendar.current
+        guard let start = cal.date(bySettingHour: 7, minute: 0, second: 0, of: Date()) else { return 8 }
+        let end = Date()
+        return max(0.5, end.timeIntervalSince(start) / 3600.0)
+    }
+
+    private var formattedDate: String {
+        let f = DateFormatter()
+        f.dateFormat = "EEEE, MMMM d"
+        return f.string(from: Date())
+    }
+
+    private var activityPins: [FlowActivityPin] {
         [
-            FlowStageMock(name: "Deep Focus", color: FlowPalette.deep, duration: "2h 15m", percent: 30),
-            FlowStageMock(name: "Light Focus", color: FlowPalette.light, duration: "3h 02m", percent: 42),
-            FlowStageMock(name: "Working", color: FlowPalette.working, duration: "1h 20m", percent: 18),
-            FlowStageMock(name: "Distracted", color: FlowPalette.distracted, duration: "48m", percent: 10),
+            FlowActivityPin(id: "working", label: String(localized: "flow.activity.working"), yFraction: 0.2),
+            FlowActivityPin(id: "meeting", label: String(localized: "flow.activity.meeting"), yFraction: 0.48),
+            FlowActivityPin(id: "walking", label: String(localized: "flow.activity.walking"), yFraction: 0.82),
         ]
-    }
-
-    private var dailyScores: [DailyFlowScore] {
-        let cal = Calendar.current
-        let today = cal.startOfDay(for: Date())
-        return (0 ..< 7).compactMap { offset -> DailyFlowScore? in
-            guard let day = cal.date(byAdding: .day, value: -6 + offset, to: today) else { return nil }
-            let daySamples = history.samples.filter { cal.isDate($0.date, inSameDayAs: day) }
-            let score: Int
-            if daySamples.isEmpty {
-                let fallbacks = [48, 55, 52, 61, 58, 67, flowIndex]
-                score = fallbacks[offset]
-            } else {
-                let ok = daySamples.filter { $0.serverInFlow == true }.count
-                score = Int(Double(ok) / Double(daySamples.count) * 100)
-            }
-            return DailyFlowScore(day: day, score: score)
-        }
-    }
-
-    private var timelineSegments: [FlowTimelineSegment] {
-        let cal = Calendar.current
-        var start = cal.date(bySettingHour: 9, minute: 0, second: 0, of: Date()) ?? Date()
-        let endDay = cal.date(bySettingHour: 17, minute: 0, second: 0, of: Date()) ?? Date()
-        var segments: [FlowTimelineSegment] = []
-        let stageCycle: [(String, Color)] = [
-            ("Deep Focus", FlowPalette.deep),
-            ("Light Focus", FlowPalette.light),
-            ("Working", FlowPalette.working),
-            ("Distracted", FlowPalette.distracted),
-            ("Light Focus", FlowPalette.light),
-            ("Deep Focus", FlowPalette.deep),
-        ]
-        var i = 0
-        while start < endDay {
-            let dur = Double([18, 25, 12, 8, 22, 15][i % 6]) * 60
-            let next = min(start.addingTimeInterval(dur), endDay)
-            let pair = stageCycle[i % stageCycle.count]
-            segments.append(FlowTimelineSegment(start: start, end: next, stage: pair.0, color: pair.1))
-            start = next
-            i += 1
-            if next >= endDay { break }
-        }
-        return segments
     }
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 22) {
-                headerScores
-                sevenDayChartWrapped
-                stagesCard
-                timelineCard
+                headerBlock
+
+                flowRhythmBlock
+                    .frame(height: 420)
+
+                insightsBlock
+
                 statusFooter
             }
             .padding(.horizontal, 20)
-            .padding(.top, 12)
-            .padding(.bottom, 120)
+            .padding(.top, 8)
+            .padding(.bottom, 100)
             .frame(maxWidth: 480)
             .frame(maxWidth: .infinity)
         }
         .background {
-            LinearGradient(
-                colors: [FlowPalette.bgTop, FlowPalette.bgBottom],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
+            DriftColorPalette.linearGradient
+                .ignoresSafeArea()
         }
     }
 
-    private var headerScores: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Flow Index")
+    private var headerBlock: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(formattedDate)
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(.white.opacity(0.55))
+
+            Text(String(localized: "flow.header.felt_prefix"))
                 .font(.subheadline)
-                .foregroundStyle(.white.opacity(0.65))
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text("\(flowIndex)")
-                    .font(.system(size: 52, weight: .bold, design: .rounded))
+                .foregroundStyle(.white.opacity(0.5))
+
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                Text(String(format: "%.1f", feltLikeHours))
+                    .font(.system(size: 56, weight: .thin, design: .rounded))
                     .foregroundStyle(.white)
-                Text("/ 100")
-                    .font(.title3)
-                    .foregroundStyle(.white.opacity(0.5))
+                Text(String(localized: "flow.header.hours_unit"))
+                    .font(.title3.weight(.light))
+                    .foregroundStyle(.white.opacity(0.45))
+            }
+
+            Text(
+                String(
+                    format: String(localized: "flow.header.elapsed_format"),
+                    locale: .current,
+                    arguments: [elapsedHours]
+                )
+            )
+            .font(.footnote)
+            .foregroundStyle(.white.opacity(0.4))
+        }
+        .padding(.top, 4)
+    }
+
+    private var flowRhythmBlock: some View {
+        GeometryReader { geo in
+            let w = geo.size.width
+            let h = geo.size.height
+            ZStack(alignment: .leading) {
+                timeAxisLabels(totalHeight: h)
+                    .frame(width: 44)
+
+                flowGlowBlob
+                    .frame(width: w * 0.42, height: h * 0.92)
+                    .position(x: w * 0.45, y: h * 0.5)
+
+                activityConnectors(size: CGSize(width: w, height: h))
             }
         }
-        .padding(.top, 8)
     }
 
-    @available(iOS 16.0, *)
-    private var sevenDayChart: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Last 7 days")
-                .font(.caption)
-                .foregroundStyle(.white.opacity(0.55))
-            Chart(dailyScores) { row in
-                BarMark(
-                    x: .value("Day", row.day, unit: .day),
-                    y: .value("Flow", row.score)
-                )
-                .foregroundStyle(
+    private func timeAxisLabels(totalHeight: CGFloat) -> some View {
+        let labels = ["7 AM", "9 AM", "12 PM", "3 PM", "6 PM"]
+        return VStack(spacing: 0) {
+            ForEach(0 ..< labels.count, id: \.self) { i in
+                Text(labels[i])
+                    .font(.caption2)
+                    .foregroundStyle(.white.opacity(0.38))
+                if i < labels.count - 1 {
+                    Spacer(minLength: 0)
+                }
+            }
+        }
+    }
+
+    private var flowGlowBlob: some View {
+        ZStack {
+            Capsule()
+                .fill(
                     LinearGradient(
-                        colors: [FlowPalette.light, FlowPalette.deep],
-                        startPoint: .bottom,
-                        endPoint: .top
+                        colors: [
+                            DriftColorPalette.flowPurple.opacity(0.85),
+                            DriftColorPalette.flowBlue.opacity(0.75),
+                            DriftColorPalette.flowTeal.opacity(0.65),
+                            DriftColorPalette.flowAmber.opacity(0.55),
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
                     )
                 )
-                .cornerRadius(6)
-            }
-            .chartYScale(domain: 0 ... 100)
-            .chartXAxis {
-                AxisMarks(values: .stride(by: .day)) { val in
-                    AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
-                        .foregroundStyle(.white.opacity(0.12))
-                    AxisValueLabel(format: .dateTime.weekday(.narrow))
-                        .foregroundStyle(.white.opacity(0.55))
-                }
-            }
-            .chartYAxis {
-                AxisMarks(position: .leading) { _ in
-                    AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
-                        .foregroundStyle(.white.opacity(0.1))
-                    AxisValueLabel()
-                        .foregroundStyle(.white.opacity(0.45))
-                }
-            }
-            .frame(height: 160)
-        }
-        .padding(16)
-        .background(glassCardDark)
-    }
+                .blur(radius: 28)
+                .scaleEffect(x: 1.1, y: 1.05)
 
-    private var stagesCard: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Text("Flow stages today")
-                .font(.headline)
-                .foregroundStyle(.white)
-            Text("Illustrative split until on-device stage detection ships.")
-                .font(.caption2)
-                .foregroundStyle(.white.opacity(0.45))
-            ForEach(mockStages) { s in
-                HStack {
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .fill(s.color)
-                        .frame(width: 10, height: 28)
-                    Text(s.name)
-                        .font(.subheadline)
-                        .foregroundStyle(.white.opacity(0.9))
-                    Spacer()
-                    Text("\(s.duration) · \(s.percent)%")
-                        .font(.caption)
-                        .foregroundStyle(.white.opacity(0.55))
-                }
-            }
-        }
-        .padding(16)
-        .background(glassCardDark)
-    }
-
-    @available(iOS 16.0, *)
-    private var timelineChart: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Today's timeline")
-                .font(.headline)
-                .foregroundStyle(.white)
-            Chart(timelineSegments) { seg in
-                RectangleMark(
-                    xStart: .value("Start", seg.start),
-                    xEnd: .value("End", seg.end),
-                    y: .value("Stage", seg.stage),
-                    height: .fixed(22)
+            Capsule()
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            DriftColorPalette.flowBlue.opacity(0.4),
+                            DriftColorPalette.flowOrange.opacity(0.35),
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
                 )
-                .foregroundStyle(seg.color)
-            }
-            .chartXAxis {
-                AxisMarks(values: .automatic(desiredCount: 6)) { _ in
-                    AxisValueLabel(format: .dateTime.hour())
-                        .foregroundStyle(.white.opacity(0.5))
-                }
-            }
-            .chartYAxis {
-                AxisMarks { _ in
-                    AxisValueLabel()
-                        .foregroundStyle(.white.opacity(0.55))
-                }
-            }
-            .frame(height: 200)
+                .blur(radius: 40)
+                .scaleEffect(0.85)
         }
-        .padding(16)
-        .background(glassCardDark)
+        .opacity(0.95)
     }
 
-    @ViewBuilder
-    private var timelineCard: some View {
-        if #available(iOS 16.0, *) {
-            timelineChart
-        } else {
-            Text("Timeline chart requires iOS 16+.")
-                .foregroundStyle(.white.opacity(0.6))
-                .padding()
+    private func activityConnectors(size: CGSize) -> some View {
+        ZStack(alignment: .topLeading) {
+            ForEach(activityPins) { pin in
+                let y = size.height * pin.yFraction
+                HStack(spacing: 0) {
+                    Spacer()
+                        .frame(width: size.width * 0.52)
+                    Rectangle()
+                        .fill(Color.white.opacity(0.12))
+                        .frame(width: size.width * 0.12, height: 1)
+                    Text(pin.label)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.white.opacity(0.85))
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background {
+                            Capsule()
+                                .fill(Color.white.opacity(0.1))
+                                .overlay {
+                                    Capsule()
+                                        .strokeBorder(Color.white.opacity(0.18), lineWidth: 1)
+                                }
+                        }
+                }
+                .position(x: size.width * 0.74, y: y)
+            }
+        }
+        .allowsHitTesting(false)
+    }
+
+    private var insightsBlock: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text(String(localized: "flow.insights.title"))
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.white.opacity(0.45))
+                .textCase(.uppercase)
+                .tracking(1.2)
+
+            insightCard(
+                title: String(localized: "flow.insight.card1.title"),
+                subtitle: String(localized: "flow.insight.card1.subtitle")
+            )
+            insightCard(
+                title: String(localized: "flow.insight.card2.title"),
+                subtitle: String(localized: "flow.insight.card2.subtitle")
+            )
         }
     }
 
-    @ViewBuilder
-    private var sevenDayChartWrapped: some View {
-        if #available(iOS 16.0, *) {
-            sevenDayChart
-        } else {
-            EmptyView()
+    private func insightCard(title: String, subtitle: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.body.weight(.semibold))
+                .foregroundStyle(.white.opacity(0.95))
+                .fixedSize(horizontal: false, vertical: true)
+            Text(subtitle)
+                .font(.caption)
+                .foregroundStyle(.white.opacity(0.45))
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(18)
+        .background {
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .fill(DriftColorPalette.insightCardFill.opacity(0.92))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 22, style: .continuous)
+                        .strokeBorder(
+                            LinearGradient(
+                                colors: [
+                                    Color.white.opacity(0.2),
+                                    Color.white.opacity(0.06),
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1
+                        )
+                }
+                .shadow(color: DriftColorPalette.flowPurple.opacity(0.15), radius: 20, y: 8)
         }
     }
 
     private var statusFooter: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Live status")
+            Text(String(localized: "flow.status.live"))
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(.white.opacity(0.4))
+                .textCase(.uppercase)
+            Text(flow.dashboardStatus.rawValue)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.white.opacity(0.9))
+            if let h = flow.currentHRV {
+                Text(
+                    String(
+                        format: String(localized: "flow.status.hrv_format"),
+                        locale: .current,
+                        arguments: [Int(h), flow.baselineHRV.map { Int($0) } ?? 0]
+                    )
+                )
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.5))
-            Text(flow.dashboardStatus.rawValue)
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .foregroundStyle(.white)
-            if let h = flow.currentHRV {
-                Text("HRV \(Int(h)) ms · baseline \(flow.baselineHRV.map { Int($0) } ?? 0) ms")
-                    .font(.caption)
-                    .foregroundStyle(.white.opacity(0.55))
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
-        .background(glassCardDark)
-    }
-
-    private var glassCardDark: some View {
-        RoundedRectangle(cornerRadius: 20, style: .continuous)
-            .fill(Color.white.opacity(0.08))
-            .overlay {
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .strokeBorder(Color.white.opacity(0.14), lineWidth: 1)
-            }
+        .background {
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .fill(Color.white.opacity(0.07))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .strokeBorder(Color.white.opacity(0.12), lineWidth: 1)
+                }
+        }
     }
 }

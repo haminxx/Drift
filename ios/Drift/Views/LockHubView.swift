@@ -177,7 +177,7 @@ struct LockHubView: View {
                 }
                 .padding(.top, 8)
 
-                Spacer(minLength: 120)
+                Spacer(minLength: 100)
             }
             .padding(.horizontal, 20)
             .padding(.top, 12)
@@ -185,15 +185,8 @@ struct LockHubView: View {
             .frame(maxWidth: .infinity)
         }
         .background {
-            LinearGradient(
-                colors: [
-                    Color(red: 0.1, green: 0.12, blue: 0.16),
-                    Color.black,
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
+            DriftColorPalette.linearGradient
+                .ignoresSafeArea()
         }
         .sheet(isPresented: $showBrickSheet) {
             BrickModeSettingsView()

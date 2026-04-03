@@ -2,47 +2,62 @@
 //  DriftColorPalette.swift
 //  Drift
 //
-//  Exact palette from image_0: Yellow → Orange → Red-Magenta → Deep Purple → Blue → Cyan.
-//  Used by GlassGradientBackground and any glass/glitch UI.
+//  App-wide dark navy / purple mood (glassmorphism Flow reference). Flow “blob” accents
+//  remain available for the timeline visualization.
 //
 
 import SwiftUI
 
 enum DriftColorPalette {
-    /// Bright sunny yellow (top of gradient)
+    // MARK: - Shell / backgrounds
+
+    static let navyDeep = Color(red: 0.04, green: 0.06, blue: 0.14)
+    static let navyMid = Color(red: 0.07, green: 0.09, blue: 0.22)
+    static let navyIndigo = Color(red: 0.1, green: 0.08, blue: 0.22)
+    static let purpleNight = Color(red: 0.12, green: 0.1, blue: 0.26)
+
+    /// Welcome / Flow line accents (muted electric blues & violets)
+    static let waveLine1 = Color(red: 0.35, green: 0.45, blue: 0.85)
+    static let waveLine2 = Color(red: 0.45, green: 0.35, blue: 0.75)
+    static let waveLine3 = Color(red: 0.3, green: 0.55, blue: 0.82)
+    static let waveLine4 = Color(red: 0.55, green: 0.4, blue: 0.9)
+
+    // MARK: - Flow visualization (reference: purple → blue → teal → warm center)
+
+    static let flowPurple = Color(red: 0.42, green: 0.22, blue: 0.62)
+    static let flowBlue = Color(red: 0.2, green: 0.45, blue: 0.95)
+    static let flowTeal = Color(red: 0.2, green: 0.72, blue: 0.78)
+    static let flowAmber = Color(red: 1.0, green: 0.78, blue: 0.35)
+    static let flowOrange = Color(red: 1.0, green: 0.55, blue: 0.28)
+
+    /// Glass insight card fill (deep purple)
+    static let insightCardFill = Color(red: 0.14, green: 0.1, blue: 0.28)
+
+    // MARK: - Legacy chromatic stops (kept for angular accents if needed)
+
     static let yellow = Color(red: 1.0, green: 0.95, blue: 0.35)
-    /// Warm orange
     static let orange = Color(red: 1.0, green: 0.55, blue: 0.2)
-    /// Deep red-magenta / crimson
     static let redMagenta = Color(red: 0.85, green: 0.2, blue: 0.4)
-    /// Deep saturated purple (center)
     static let deepPurple = Color(red: 0.35, green: 0.1, blue: 0.5)
-    /// Vivid blue
     static let blue = Color(red: 0.25, green: 0.45, blue: 0.95)
-    /// Bright neon cyan (bottom)
     static let cyan = Color(red: 0.2, green: 0.85, blue: 0.95)
 
-    /// All stops in order for gradient (top to bottom)
     static var gradientStops: [Gradient.Stop] {
         [
-            .init(color: yellow, location: 0),
-            .init(color: orange, location: 0.2),
-            .init(color: redMagenta, location: 0.4),
-            .init(color: deepPurple, location: 0.5),
-            .init(color: blue, location: 0.7),
-            .init(color: cyan, location: 1.0),
+            .init(color: navyDeep, location: 0),
+            .init(color: navyMid, location: 0.35),
+            .init(color: navyIndigo, location: 0.65),
+            .init(color: purpleNight, location: 1),
         ]
     }
 
-    /// Linear gradient (vertical) for fallback / non-shader use
     static var linearGradient: LinearGradient {
         LinearGradient(stops: gradientStops, startPoint: .top, endPoint: .bottom)
     }
 
-    /// Angular gradient for weaving/organic motion
     static var angularGradient: AngularGradient {
         AngularGradient(
-            colors: [yellow, orange, redMagenta, deepPurple, blue, cyan, yellow],
+            colors: [flowPurple, flowBlue, flowTeal, flowAmber, flowPurple],
             center: .center
         )
     }

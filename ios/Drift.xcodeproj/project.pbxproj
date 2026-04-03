@@ -26,14 +26,13 @@
 		954694BF366FF87C7D9CB1D0 /* WellnessSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D958696A313BB75DEDA1A41; };
 		3B56BC1706D788F85C01AF4D /* BrickModeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E16D054873D1B6BB3D5BD30; };
 		152A5875F81BB03765457B5A /* DriftColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28823749E022189F6990F02A; };
-		F6FB8A9934CB0F10E0FFCFBF /* GlassGradientBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9953054925ACD6007A8BCA; };
+		4D1AFC107FF26C97B6ED6C74 /* NavyShaderLinesBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6130DEE22C8701E475537B; };
 		1B6196D66C0E0886162CFE16 /* SummaryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4DC66E5FA4944E49E9E755; };
 		AD6DBFA7656B576AF0458448 /* FlowAnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ABD78DA33153A0758DEDE7; };
-		6D393BF1556CEEC74A074307 /* HomeSereneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E79068DE29C92290E3B093E; };
 		5AD5CDDCBC392F03A4A7A438 /* InsightFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9525026B369CCE0C497012D0; };
 		A7016A79A03E4ED7A886FCA2 /* LockHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6635DA3EDBA6CB90AFE876C6; };
 		4487E26BC9A056824FACAF5A /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651EB6E009DB5FA359B6F7E7; };
-		B26CA2B321BFE9CB88FF97C4 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81639EF00B1E537F035E65C; };
+		69DE5E818889047CDCE2345D /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B44E3B69D8AE2B734270E7; };
 		2ED36F40088483A25591408F /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03CD453E8EABFE03D104BA3 /* Charts.framework */; };
 		A5A1DADAA726AA70DB8C94A9 /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12321C6BA42C266AD7BDB3D /* FamilyControls.framework */; };
 		0499F72E4DBF51B88344C691 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 978AAB1D7616022623B1DABA /* ManagedSettings.framework */; };
@@ -75,13 +74,12 @@
 		9D958696A313BB75DEDA1A41 /* WellnessSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WellnessSample.swift"; sourceTree = "<group>"; };
 		5E16D054873D1B6BB3D5BD30 /* BrickModeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrickModeSettingsView.swift"; sourceTree = "<group>"; };
 		60ABD78DA33153A0758DEDE7 /* FlowAnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlowAnalyticsView.swift"; sourceTree = "<group>"; };
-		3E79068DE29C92290E3B093E /* HomeSereneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeSereneView.swift"; sourceTree = "<group>"; };
 		9525026B369CCE0C497012D0 /* InsightFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InsightFeedView.swift"; sourceTree = "<group>"; };
 		6635DA3EDBA6CB90AFE876C6 /* LockHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LockHubView.swift"; sourceTree = "<group>"; };
 		651EB6E009DB5FA359B6F7E7 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainTabView.swift"; sourceTree = "<group>"; };
-		B81639EF00B1E537F035E65C /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SplashView.swift"; sourceTree = "<group>"; };
+		86B44E3B69D8AE2B734270E7 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WelcomeView.swift"; sourceTree = "<group>"; };
 		28823749E022189F6990F02A /* DriftColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DriftColorPalette.swift"; sourceTree = "<group>"; };
-		BB9953054925ACD6007A8BCA /* GlassGradientBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GlassGradientBackground.swift"; sourceTree = "<group>"; };
+		9C6130DEE22C8701E475537B /* NavyShaderLinesBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NavyShaderLinesBackground.swift"; sourceTree = "<group>"; };
 		EA4DC66E5FA4944E49E9E755 /* SummaryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SummaryCardView.swift"; sourceTree = "<group>"; };
 		BB37888FAF0BDB2D79B3A09D /* DriftWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DriftWatchApp.swift"; sourceTree = "<group>"; };
 		56DD0449181FFAC01BC2BC93 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HealthKitManager.swift"; sourceTree = "<group>"; };
@@ -175,11 +173,10 @@
 				332D38999D2A5575F788297D,
 				5E16D054873D1B6BB3D5BD30,
 				60ABD78DA33153A0758DEDE7,
-				3E79068DE29C92290E3B093E,
 				9525026B369CCE0C497012D0,
 				6635DA3EDBA6CB90AFE876C6,
 				651EB6E009DB5FA359B6F7E7,
-				B81639EF00B1E537F035E65C,
+				86B44E3B69D8AE2B734270E7,
 			);
 			path = "Views";
 			sourceTree = "<group>";
@@ -188,7 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				28823749E022189F6990F02A,
-				BB9953054925ACD6007A8BCA,
+				9C6130DEE22C8701E475537B,
 				EA4DC66E5FA4944E49E9E755,
 			);
 			path = "Components";
@@ -360,14 +357,13 @@
 				954694BF366FF87C7D9CB1D0,
 				3B56BC1706D788F85C01AF4D,
 				152A5875F81BB03765457B5A,
-				F6FB8A9934CB0F10E0FFCFBF,
+				4D1AFC107FF26C97B6ED6C74,
 				1B6196D66C0E0886162CFE16,
 				AD6DBFA7656B576AF0458448,
-				6D393BF1556CEEC74A074307,
 				5AD5CDDCBC392F03A4A7A438,
 				A7016A79A03E4ED7A886FCA2,
 				4487E26BC9A056824FACAF5A,
-				B26CA2B321BFE9CB88FF97C4,
+				69DE5E818889047CDCE2345D,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

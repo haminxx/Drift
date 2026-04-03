@@ -50,7 +50,7 @@ struct InsightFeedView: View {
                 ForEach(cards) { card in
                     insightCard(card)
                 }
-                Spacer(minLength: 120)
+                Spacer(minLength: 100)
             }
             .padding(.horizontal, 20)
             .padding(.top, 12)
@@ -58,15 +58,8 @@ struct InsightFeedView: View {
             .frame(maxWidth: .infinity)
         }
         .background {
-            LinearGradient(
-                colors: [
-                    Color(red: 0.12, green: 0.1, blue: 0.22),
-                    Color.black,
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+            DriftColorPalette.linearGradient
+                .ignoresSafeArea()
         }
     }
 
@@ -75,7 +68,7 @@ struct InsightFeedView: View {
             Text(card.kind.uppercased())
                 .font(.caption2)
                 .fontWeight(.bold)
-                .foregroundStyle(.purple.opacity(0.9))
+                .foregroundStyle(DriftColorPalette.flowPurple.opacity(0.95))
             Text(card.title)
                 .font(.headline)
                 .foregroundStyle(.white)
@@ -87,19 +80,23 @@ struct InsightFeedView: View {
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(.ultraThinMaterial)
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .fill(DriftColorPalette.insightCardFill.opacity(0.92))
                 .overlay {
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    RoundedRectangle(cornerRadius: 22, style: .continuous)
                         .strokeBorder(
                             LinearGradient(
-                                colors: [Color.white.opacity(0.35), Color.purple.opacity(0.25)],
+                                colors: [
+                                    Color.white.opacity(0.2),
+                                    Color.white.opacity(0.06),
+                                ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             ),
                             lineWidth: 1
                         )
                 }
+                .shadow(color: DriftColorPalette.flowPurple.opacity(0.12), radius: 16, y: 6)
         }
     }
 }

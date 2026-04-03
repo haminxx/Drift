@@ -65,7 +65,7 @@ Optional: **Firebase** for login, user profile, and saved flow summaries/charts.
 - **FirebaseManager** — `FirebaseApp.configure()`, sign-in/sign-out, `getIdToken()`, Firestore helpers for user and summaries. Compiles with or without Firebase SDK via `#if canImport(FirebaseCore)`.
 - **ShieldManager** — Family Controls / ManagedSettings: applies or removes shield on a set of app tokens (user authorizes once in the system Screen Time UI).
 - **ShieldTimerManager** — 5‑minute countdown; triggers Time-Sensitive notification when drift is detected; on expiry calls `ShieldManager.applyShield()`.
-- **UI:** ContentView → SplashView (gradient reveal, “drift” + Continue) → HomeDashboardView (flow state + summary cards). Cards are placeholders for flow %, patterns, HRV, intervention status.
+- **UI:** ContentView → WelcomeView (navy animated background + Start) → MainTabView (Flow, Lock, Insight). Flow shows felt-time, timeline visualization, and insights; Lock and Insight use the same dark navy shell.
 
 ### Watch app (watchOS)
 

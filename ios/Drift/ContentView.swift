@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  Drift
 //
-//  Splash then four-tab main shell (Tide-style Home, Flow analytics, Lock hub, Insights).
+//  Welcome then three-tab shell (Flow, Lock, Insight).
 //
 
 import SwiftUI
@@ -22,7 +22,7 @@ struct ContentView: View {
                     )
                     .id("main")
             } else {
-                SplashView(onContinue: {
+                WelcomeView(onContinue: {
                     withAnimation(.spring(response: 0.45, dampingFraction: 0.88)) {
                         showMain = true
                     }
@@ -33,7 +33,7 @@ struct ContentView: View {
                         removal: .opacity.combined(with: .move(edge: .leading))
                     )
                 )
-                .id("splash")
+                .id("welcome")
             }
         }
     }
