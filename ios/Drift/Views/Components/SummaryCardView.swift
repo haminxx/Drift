@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct SummaryCardView<Content: View>: View {
-    var icon: (() -> View)?
+    var icon: (() -> any View)?
     var title: String?
     var subtitle: String?
     var showChevron: Bool = false
@@ -49,7 +49,7 @@ struct SummaryCardView<Content: View>: View {
 
 extension SummaryCardView where Content == EmptyView {
     init(
-        icon: (() -> View)? = nil,
+        icon: (() -> any View)? = nil,
         title: String? = nil,
         subtitle: String? = nil,
         showChevron: Bool = false

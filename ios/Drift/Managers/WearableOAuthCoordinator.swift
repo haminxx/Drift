@@ -28,9 +28,28 @@ enum WearableOAuthError: LocalizedError {
     }
 }
 
+/// NSObject + `ASWebAuthenticationPresentationContextProviding` must live off `@MainActor` so
+/// `presentationAnchor(for:)` can be `@objc` without actor/isolation conflicts.
+private final class WebAuthenticationPresentationAnchor: NSObject, ASWebAuthenticationPresentationContextProviding {
+    @objc func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        let window = scenes.flatMap(\.windows).first { $0.isKeyWindow }
+            ?? scenes.flatMap(\.windows).first
+        if let window {
+            return window
+        }
+        // Fallback: new window on first scene (should be rare)
+        if let scene = scenes.first {
+            return UIWindow(windowScene: scene)
+        }
+        return UIWindow()
+    }
+}
+
 @MainActor
-final class WearableOAuthCoordinator: NSObject, ObservableObject {
+final class WearableOAuthCoordinator: ObservableObject {
     private var authSession: ASWebAuthenticationSession?
+    private let presentationAnchorProvider = WebAuthenticationPresentationAnchor()
 
     func connectFitbit() async throws {
         let auth = try await APIClient.shared.fetchFitbitAuthorizeURL()
@@ -89,27 +108,12 @@ final class WearableOAuthCoordinator: NSObject, ObservableObject {
                     }
                 }
             }
-            session.presentationContextProvider = self
+            session.presentationContextProvider = presentationAnchorProvider
             session.prefersEphemeralWebBrowserSession = true
             authSession = session
             if !session.start() {
                 cont.resume(throwing: WearableOAuthError.sessionStartFailed)
             }
-        }
-    }
-}
-
-extension WearableOAuthCoordinator: ASWebAuthenticationSessionPresentationContextProviding {
-    nonisolated func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        MainActor.assumeIsolated {
-            UIApplication.shared.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .flatMap { $0.windows }
-                .first { $0.isKeyWindow } ?? UIApplication.shared.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .flatMap { $0.windows }
-                .first
-                ?? UIWindow()
         }
     }
 }
