@@ -82,6 +82,7 @@ def main() -> None:
     IOS_RES = rid("phase.iOS.res")
     WATCH_SOURCES = rid("phase.watch.sources")
     WATCH_FW = rid("phase.watch.fw")
+    WATCH_RES = rid("phase.watch.res")
     EMBED_WATCH = rid("phase.embedWatch")
     IOS_CONF_LIST = rid("xc.iOS")
     WATCH_CONF_LIST = rid("xc.watch")
@@ -90,8 +91,10 @@ def main() -> None:
     PROXY = rid("containerProxy")
 
     assets_ref = rid("fileref.Assets")
+    watch_assets_ref = rid("fileref.Watch.Assets")
     strings_ref = rid("fileref.xcstrings")
     bf_assets = rid("bf.Assets")
+    bf_watch_assets = rid("bf.Watch.Assets")
     bf_strings = rid("bf.xcstrings")
     embed_bf = rid("bf.embed")
 
@@ -129,6 +132,8 @@ def main() -> None:
         if tree.name == "Drift" and parent_path == "":
             kids.append(assets_ref)
             kids.append(strings_ref)
+        if tree.name == "Drift Watch App" and parent_path == "":
+            kids.append(watch_assets_ref)
         lines.append(f"\t\t{gid} /* {tree.name} */ = {{")
         lines.append("\t\t\tisa = PBXGroup;")
         lines.append("\t\t\tchildren = (")
@@ -169,6 +174,7 @@ def main() -> None:
         ap(f"\t\t{fw_bf(n, 'ios')} /* {n}.framework in Frameworks */ = {{isa = PBXBuildFile; fileRef = {fw_ref(n)} /* {n}.framework */; }};")
 
     ap(f"\t\t{bf_assets} /* Assets.xcassets in Resources */ = {{isa = PBXBuildFile; fileRef = {assets_ref} /* Assets.xcassets */; }};")
+    ap(f"\t\t{bf_watch_assets} /* Assets.xcassets in Resources */ = {{isa = PBXBuildFile; fileRef = {watch_assets_ref} /* Assets.xcassets */; }};")
     ap(f"\t\t{bf_strings} /* Localizable.xcstrings in Resources */ = {{isa = PBXBuildFile; fileRef = {strings_ref} /* Localizable.xcstrings */; }};")
 
     watch_build_swift: list[tuple[str, str]] = []
@@ -215,6 +221,9 @@ def main() -> None:
 
     ap(
         f"\t\t{assets_ref} /* Assets.xcassets */ = {{isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = \"<group>\"; }};"
+    )
+    ap(
+        f"\t\t{watch_assets_ref} /* Assets.xcassets */ = {{isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = \"<group>\"; }};"
     )
     ap(
         f"\t\t{strings_ref} /* Localizable.xcstrings */ = {{isa = PBXFileReference; lastKnownFileType = text.json; path = Localizable.xcstrings; sourceTree = \"<group>\"; }};"
@@ -300,6 +309,7 @@ def main() -> None:
     ap("\t\t\tbuildPhases = (")
     ap(f"\t\t\t\t{WATCH_SOURCES} /* Sources */,")
     ap(f"\t\t\t\t{WATCH_FW} /* Frameworks */,")
+    ap(f"\t\t\t\t{WATCH_RES} /* Resources */,")
     ap("\t\t\t);")
     ap("\t\t\tbuildRules = (")
     ap("\t\t\t);")
@@ -356,6 +366,14 @@ def main() -> None:
     ap("\t\t\tfiles = (")
     ap(f"\t\t\t\t{bf_assets},")
     ap(f"\t\t\t\t{bf_strings},")
+    ap("\t\t\t);")
+    ap("\t\t\trunOnlyForDeploymentPostprocessing = 0;")
+    ap("\t\t};")
+    ap(f"\t\t{WATCH_RES} /* Resources */ = {{")
+    ap("\t\t\tisa = PBXResourcesBuildPhase;")
+    ap("\t\t\tbuildActionMask = 2147483647;")
+    ap("\t\t\tfiles = (")
+    ap(f"\t\t\t\t{bf_watch_assets},")
     ap("\t\t\t);")
     ap("\t\t\trunOnlyForDeploymentPostprocessing = 0;")
     ap("\t\t};")
@@ -475,6 +493,7 @@ def main() -> None:
     ap(f"\t\t{W_DBG} /* Debug */ = {{")
     ap("\t\t\tisa = XCBuildConfiguration;")
     ap("\t\t\tbuildSettings = {")
+    ap('\t\t\t\tASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;')
     ap("\t\t\t\tCODE_SIGN_STYLE = Automatic;")
     ap("\t\t\t\tCURRENT_PROJECT_VERSION = 1;")
     ap("\t\t\t\tDEVELOPMENT_TEAM = \"\";")
@@ -495,6 +514,7 @@ def main() -> None:
     ap(f"\t\t{W_REL} /* Release */ = {{")
     ap("\t\t\tisa = XCBuildConfiguration;")
     ap("\t\t\tbuildSettings = {")
+    ap('\t\t\t\tASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;')
     ap("\t\t\t\tCODE_SIGN_STYLE = Automatic;")
     ap("\t\t\t\tCURRENT_PROJECT_VERSION = 1;")
     ap("\t\t\t\tDEVELOPMENT_TEAM = \"\";")

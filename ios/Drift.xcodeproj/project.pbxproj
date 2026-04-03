@@ -42,6 +42,7 @@
 		EFB790018DB0EE550EB62E83 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70607F77CF22CD1F159C7BD7 /* UserNotifications.framework */; };
 		D21AE9F49DB6642F42823FA5 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B73DD260E0A50D7FA67E7C2B /* AuthenticationServices.framework */; };
 		B311842FCB6394953AA62851 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 151EDD20B192A6682C08E3A7 /* Assets.xcassets */; };
+		2EECC91E0625150291ED96D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A15443A92E3CA09C96DD72AF /* Assets.xcassets */; };
 		24775113A57477D8F569CD16 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 605E70FA682E9FC8A22AFEEC /* Localizable.xcstrings */; };
 		9557B46D6BF9AE34BDA8DF13 /* DriftWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB37888FAF0BDB2D79B3A09D; };
 		28A4406FC9F0EBC7E2E44905 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56DD0449181FFAC01BC2BC93; };
@@ -87,6 +88,7 @@
 		B6EDB9B6F8A2D04F747FBE80 /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WatchConnectivityManager.swift"; sourceTree = "<group>"; };
 		69707272AAE7FCD42057098F /* HRVPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HRVPayload.swift"; sourceTree = "<group>"; };
 		151EDD20B192A6682C08E3A7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A15443A92E3CA09C96DD72AF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		605E70FA682E9FC8A22AFEEC /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		B73DD260E0A50D7FA67E7C2B /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		B03CD453E8EABFE03D104BA3 /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = System/Library/Frameworks/Charts.framework; sourceTree = SDKROOT; };
@@ -198,6 +200,7 @@
 				5B0B3B3D22AB204A219AD9CA,
 				A15A82E95D202DB6F61C37A4,
 				BB37888FAF0BDB2D79B3A09D,
+				A15443A92E3CA09C96DD72AF,
 			);
 			path = "Drift Watch App";
 			sourceTree = "<group>";
@@ -265,6 +268,7 @@
 			buildPhases = (
 				A9F1B2235408C4DA199F713D /* Sources */,
 				C2F87B197D338925BCE6F276 /* Frameworks */,
+				99BFA9E3AC764F63866C660D /* Resources */,
 			);
 			buildRules = (
 			);
@@ -319,6 +323,14 @@
 			files = (
 				B311842FCB6394953AA62851,
 				24775113A57477D8F569CD16,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		99BFA9E3AC764F63866C660D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2EECC91E0625150291ED96D6,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,6 +463,7 @@
 		2D8E4B449932D58429F6EA9B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -471,6 +484,7 @@
 		299D81593E645854017FE892 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
