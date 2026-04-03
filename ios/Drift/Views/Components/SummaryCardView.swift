@@ -18,7 +18,7 @@ struct SummaryCardView<Content: View>: View {
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             if let icon = icon {
-                icon()
+                AnyView(icon())
             }
             VStack(alignment: .leading, spacing: 4) {
                 if let title = title {

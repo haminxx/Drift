@@ -8,7 +8,8 @@
 
 import Foundation
 
-final class APIClient: ObservableObject {
+/// Shared network client; `@unchecked Sendable` so `URLSession` `@Sendable` completions can reference it safely.
+final class APIClient: ObservableObject, @unchecked Sendable {
     static let shared = APIClient()
 
     /// Base URL for the backend (Render). Override in Xcode scheme or plist if needed.
@@ -79,7 +80,7 @@ final class APIClient: ObservableObject {
             if let provider = authTokenProvider, let token = await provider() {
                 request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             }
-            let task = session.dataTask(with: request) { [decoder] data, _, error in
+            let task = session.dataTask(with: request) { [weak self, decoder] data, _, error in
                 if let error = error {
                     DispatchQueue.main.async { completion?(.failure(error)) }
                     return
@@ -91,6 +92,7 @@ final class APIClient: ObservableObject {
                 do {
                     let response = try decoder.decode(FlowStateResponse.self, from: data)
                     DispatchQueue.main.async {
+                        guard let self else { return }
                         DriftSessionState.shared.lastServerInFlow = response.isInFlow
                         if let hrv = Self.extractHrvMs(from: body) {
                             WellnessHistoryStore.shared.append(
