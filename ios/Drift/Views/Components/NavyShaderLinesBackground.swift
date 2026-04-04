@@ -11,18 +11,19 @@ import SwiftUI
 struct NavyShaderLinesBackground: View {
     var body: some View {
         TimelineView(.animation(minimumInterval: 1.0 / 45.0)) { timeline in
-            let t = timeline.date.timeIntervalSinceReferenceDate
             Canvas { context, size in
+                let t = timeline.date.timeIntervalSinceReferenceDate
                 let top = DriftColorPalette.navyDeep
                 let mid = DriftColorPalette.navyMid
                 let bottom = DriftColorPalette.navyIndigo
                 let rect = Path(CGRect(origin: .zero, size: size))
+                // GraphicsContext shading uses CGPoint in canvas coordinates (not UnitPoint).
                 context.fill(
                     rect,
                     with: .linearGradient(
                         Gradient(colors: [top, mid, bottom]),
-                        startPoint: UnitPoint(x: 0.15, y: 0),
-                        endPoint: UnitPoint(x: 0.85, y: 1)
+                        startPoint: CGPoint(x: size.width * 0.15, y: 0),
+                        endPoint: CGPoint(x: size.width * 0.85, y: size.height)
                     )
                 )
 
