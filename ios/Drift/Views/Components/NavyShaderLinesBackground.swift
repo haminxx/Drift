@@ -10,7 +10,7 @@ import SwiftUI
 
 struct NavyShaderLinesBackground: View {
     var body: some View {
-        TimelineView(.animation(minimumInterval: 1 / 45)) { timeline in
+        TimelineView(.animation(minimumInterval: 1.0 / 45.0)) { timeline in
             let t = timeline.date.timeIntervalSinceReferenceDate
             Canvas { context, size in
                 let top = DriftColorPalette.navyDeep
