@@ -38,10 +38,11 @@ You do **not** need a Render (or other public) URL for development.
 
 ### iOS
 
-1. Open `ios/Drift.xcodeproj` in Xcode on a Mac (the repo includes the project; see `ios/README.md` if you need to regenerate it).
-2. Add capabilities: HealthKit (Watch and iOS if using Garmin/Health), Background Modes — Workout (Watch), Time-Sensitive Notifications (iOS), Family Controls (iOS).
-3. See `docs/ENTITLEMENTS.md` for Info.plist keys and steps.
-4. Set the backend base URL (localhost/LAN IP for dev, or Render URL when deployed).
+1. Bundle IDs: [docs/BUNDLE_IDS.md](docs/BUNDLE_IDS.md) (`com.flow.drift` / `com.flow.drift.watchkitapp`).
+2. Open `ios/Drift.xcodeproj` in Xcode on a Mac (the repo includes the project; see `ios/README.md` if you need to regenerate it).
+3. Add capabilities: HealthKit (Watch and iOS if using Garmin/Health), Background Modes — Workout (Watch), Time-Sensitive Notifications (iOS), Family Controls (iOS).
+4. See `docs/ENTITLEMENTS.md` for Info.plist keys and steps.
+5. Set the backend base URL (localhost/LAN IP for dev, or Render URL when deployed).
 
 ### Garmin watch users
 

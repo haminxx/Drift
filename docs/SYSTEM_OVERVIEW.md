@@ -80,6 +80,7 @@ Optional: **Firebase** for login, user profile, and saved flow summaries/charts.
 
 ## What you need to set
 
+- **Bundle IDs:** iOS `com.flow.drift`, Watch `com.flow.drift.watchkitapp`; `WKCompanionAppBundleIdentifier` = `com.flow.drift`. See [BUNDLE_IDS.md](BUNDLE_IDS.md).
 - **iOS:** In code or config, set `APIClient.shared.baseURL` to your Render URL, e.g. `https://drift-hrv-backend.onrender.com`.
 - **Render:** Environment variable `FIREBASE_CREDENTIALS_JSON` = full contents of your Firebase service account JSON (for Firestore and optional auth).
 - **Firebase:** iOS app needs `GoogleService-Info.plist` and Firebase SDK (Auth + Firestore) for login and summaries; keep the plist out of Git.

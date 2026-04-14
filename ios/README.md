@@ -2,7 +2,7 @@
 
 ## Open in Xcode (macOS required)
 
-The repo includes **`Drift.xcodeproj`** so you can **double-click or File → Open** and press **Run** on an iPhone simulator.
+The repo includes **`Drift.xcodeproj`** so you can **double-click or File → Open** and press **Run** on an iPhone simulator. Bundle IDs: **`com.flow.drift`** (iOS) and **`com.flow.drift.watchkitapp`** (Watch); see repo **`docs/BUNDLE_IDS.md`**.
 
 1. Use a **Mac** with Xcode 15+ (iOS Simulator does not run on Windows).
 2. Open **`ios/Drift.xcodeproj`**.

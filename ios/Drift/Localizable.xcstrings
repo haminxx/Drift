@@ -221,6 +221,72 @@
         }
       }
     },
+    "flow.insight.dynamic.streak.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your longest in-flow stretch today: %.1f hours."
+          }
+        }
+      }
+    },
+    "flow.insight.dynamic.streak.subtitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ – %@ — from synced readings"
+          }
+        }
+      }
+    },
+    "flow.insight.dynamic.latest.inflow.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latest reading: in flow"
+          }
+        }
+      }
+    },
+    "flow.insight.dynamic.latest.inflow.subtitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HRV looks steady versus your baseline. Keep the streak."
+          }
+        }
+      }
+    },
+    "flow.insight.dynamic.latest.drift.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latest reading: drifting"
+          }
+        }
+      }
+    },
+    "flow.insight.dynamic.latest.drift.subtitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take a short reset — notifications or shields may follow your Lock settings."
+          }
+        }
+      }
+    },
     "home.greeting.morning" : {
       "extractionState" : "manual",
       "localizations" : {

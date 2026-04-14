@@ -2,6 +2,8 @@
 
 Use this as a reference when configuring the Drift app in Xcode. Do not commit sensitive values.
 
+**Bundle IDs** for this project: see [BUNDLE_IDS.md](BUNDLE_IDS.md) (`com.flow.drift` / `com.flow.drift.watchkitapp`).
+
 ---
 
 ## Capabilities (Xcode → Signing & Capabilities)
@@ -42,6 +44,14 @@ Use this as a reference when configuring the Drift app in Xcode. Do not commit s
 3. Select the **Drift** (iOS) target → Signing & Capabilities → + Capability → **Time-Sensitive Notifications** (if available in your Xcode version).
 4. **Drift** (iOS) → Signing & Capabilities → + Capability → **Family Controls**.
 5. In both targets' **Info** tabs, add the usage description keys above where applicable.
+
+---
+
+## Manual verification (device recommended)
+
+- **HealthKit**: On a physical iPhone (and Watch if applicable), grant read/write as prompted; confirm HRV samples appear in **Flow** live status and `WellnessHistoryStore` drives insight cards after API responses.
+- **HRV → backend**: Set `APIClient.shared.baseURL` to your Mac LAN IP or Render URL; watch Xcode console or backend logs for `POST /api/v1/hrv_stream`.
+- **Shields**: Authorize **Family Controls** in the Lock / Screen Time flow; trigger **drift** (out of flow) so `ShieldTimerManager` fires the warning notification; after the timer, confirm `ShieldManager` applies shields; return to flow and confirm shields clear when `is_in_flow` is true.
 
 ---
 

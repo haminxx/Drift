@@ -2,7 +2,11 @@
 //  DriftApp.swift
 //  Drift
 //
-//  Wire WatchConnectivity and HealthKit (Garmin/Health pipeline) → APIClient → ShieldTimerManager / ShieldManager.
+//  End-to-end pipeline (see also docs/SYSTEM_OVERVIEW.md):
+//  1) WatchConnectivityManager / HealthKitManager → APIClient.postHRVStream
+//  2) POST /api/v1/hrv_stream → FlowStateResponse.isInFlow
+//  3) isInFlow == false → onFlowStateLost → ShieldTimerManager (notification + 5 min)
+//  4) Timer expiry → ShieldManager.applyShields; isInFlow == true → onFlowStateRestored → remove shields
 //
 
 import SwiftUI

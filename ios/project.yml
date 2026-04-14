@@ -5,7 +5,7 @@
 
 name: Drift
 options:
-  bundleIdPrefix: com.drift
+  bundleIdPrefix: com.flow
   deploymentTarget:
     iOS: "16.0"
     watchOS: "10.0"
@@ -26,7 +26,7 @@ targets:
           - "**/.DS_Store"
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.drift.Drift
+        PRODUCT_BUNDLE_IDENTIFIER: com.flow.drift
         INFOPLIST_FILE: Drift/Info.plist
         IPHONEOS_DEPLOYMENT_TARGET: "16.0"
         TARGETED_DEVICE_FAMILY: "1,2"
@@ -55,7 +55,7 @@ targets:
           - "**/.DS_Store"
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.drift.Drift.watchkitapp
+        PRODUCT_BUNDLE_IDENTIFIER: com.flow.drift.watchkitapp
         INFOPLIST_FILE: "Drift Watch App/Info.plist"
         INFOPLIST_PREPROCESS: YES
         WATCHOS_DEPLOYMENT_TARGET: "10.0"

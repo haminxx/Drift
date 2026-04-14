@@ -17,6 +17,7 @@ private struct FlowActivityPin: Identifiable {
 struct FlowAnalyticsView: View {
     @ObservedObject private var history = WellnessHistoryStore.shared
     @ObservedObject private var flow = FlowStateManager.shared
+    @ObservedObject private var session = DriftSessionState.shared
 
     private var flowIndex: Int {
         let cal = Calendar.current
@@ -213,21 +214,16 @@ struct FlowAnalyticsView: View {
     }
 
     private var insightsBlock: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        let copy = FlowInsightBuilder.cardPair(samples: history.samples, lastServerInFlow: session.lastServerInFlow)
+        return VStack(alignment: .leading, spacing: 14) {
             Text(String(localized: "flow.insights.title"))
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.white.opacity(0.45))
                 .textCase(.uppercase)
                 .tracking(1.2)
 
-            insightCard(
-                title: String(localized: "flow.insight.card1.title"),
-                subtitle: String(localized: "flow.insight.card1.subtitle")
-            )
-            insightCard(
-                title: String(localized: "flow.insight.card2.title"),
-                subtitle: String(localized: "flow.insight.card2.subtitle")
-            )
+            insightCard(title: copy.t1, subtitle: copy.s1)
+            insightCard(title: copy.t2, subtitle: copy.s2)
         }
     }
 
@@ -296,5 +292,99 @@ struct FlowAnalyticsView: View {
                         .strokeBorder(Color.white.opacity(0.12), lineWidth: 1)
                 }
         }
+    }
+}
+
+// MARK: - Data-driven insight copy (WellnessHistoryStore + server verdict)
+
+private enum FlowInsightBuilder {
+    private static let maxGap: TimeInterval = 30 * 60
+    private static let minStreakSeconds: TimeInterval = 10 * 60
+
+    static func cardPair(samples: [WellnessSample], lastServerInFlow: Bool?) -> (t1: String, s1: String, t2: String, s2: String) {
+        let cal = Calendar.current
+        let sorted = samples.filter { cal.isDateInToday($0.date) }.sorted { $0.date < $1.date }
+        let tf = DateFormatter()
+        tf.timeStyle = .short
+
+        let t1: String
+        let s1: String
+        if let streak = longestFlowStreak(in: sorted), streak.duration >= minStreakSeconds {
+            let hours = streak.duration / 3600.0
+            t1 = String(
+                format: String(localized: "flow.insight.dynamic.streak.title"),
+                locale: .current,
+                arguments: [hours]
+            )
+            s1 = String(
+                format: String(localized: "flow.insight.dynamic.streak.subtitle"),
+                locale: .current,
+                arguments: [tf.string(from: streak.start), tf.string(from: streak.end)]
+            )
+        } else {
+            t1 = String(localized: "flow.insight.card1.title")
+            s1 = String(localized: "flow.insight.card1.subtitle")
+        }
+
+        let t2: String
+        let s2: String
+        if let last = sorted.last {
+            let inFlow = last.serverInFlow ?? lastServerInFlow ?? true
+            if inFlow {
+                t2 = String(localized: "flow.insight.dynamic.latest.inflow.title")
+                s2 = String(localized: "flow.insight.dynamic.latest.inflow.subtitle")
+            } else {
+                t2 = String(localized: "flow.insight.dynamic.latest.drift.title")
+                s2 = String(localized: "flow.insight.dynamic.latest.drift.subtitle")
+            }
+        } else {
+            t2 = String(localized: "flow.insight.card2.title")
+            s2 = String(localized: "flow.insight.card2.subtitle")
+        }
+
+        return (t1, s1, t2, s2)
+    }
+
+    private struct Streak {
+        let duration: TimeInterval
+        let start: Date
+        let end: Date
+    }
+
+    private static func longestFlowStreak(in sorted: [WellnessSample]) -> Streak? {
+        var best: Streak?
+        var runStart: Date?
+        var runEnd: Date?
+
+        func closeRun() {
+            guard let rs = runStart, let re = runEnd else { return }
+            let d = re.timeIntervalSince(rs)
+            if let b = best {
+                if d > b.duration { best = Streak(duration: d, start: rs, end: re) }
+            } else {
+                best = Streak(duration: d, start: rs, end: re)
+            }
+        }
+
+        for s in sorted {
+            guard s.serverInFlow == true else {
+                closeRun()
+                runStart = nil
+                runEnd = nil
+                continue
+            }
+            if runStart == nil {
+                runStart = s.date
+                runEnd = s.date
+            } else if let re = runEnd, s.date.timeIntervalSince(re) > maxGap {
+                closeRun()
+                runStart = s.date
+                runEnd = s.date
+            } else {
+                runEnd = s.date
+            }
+        }
+        closeRun()
+        return best
     }
 }

@@ -4,6 +4,8 @@ Drift uses **two patterns**:
 
 1. **On-device (Apple Watch / Apple Health)** — [HealthKit](https://developer.apple.com/documentation/healthkit) on iOS and watchOS. No vendor API key. Enable the HealthKit capability and usage strings in Xcode (see [ENTITLEMENTS.md](ENTITLEMENTS.md)). Garmin data can still reach the app via **Garmin Connect → Apple Health → HealthKit** without OAuth.
 
+**iOS URL types:** `CFBundleURLName` is `com.flow.drift.oauth`; **`CFBundleURLSchemes`** remains **`drift`**, so redirect URIs stay **`drift://oauth/...`** (see [BUNDLE_IDS.md](BUNDLE_IDS.md)).
+
 2. **Cloud OAuth (Fitbit, Garmin Connect API)** — Optional linking of a user account to third-party REST APIs. The backend stores **per-user** access/refresh tokens encrypted at rest (`TOKEN_ENCRYPTION_KEY`). Client secrets stay on the server (`FITBIT_CLIENT_SECRET`, `GARMIN_CLIENT_SECRET`).
 
 Google Fit / Health Connect and Samsung Health are **not** implemented as OAuth adapters in this repo yet; the backend lists them in `GET /api/v1/wearables/providers` with `configured: false` until you add adapters.

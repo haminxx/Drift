@@ -2,8 +2,8 @@
 //  APIClient.swift
 //  Drift
 //
-//  Posts HRV data to the Python backend and parses flow state response.
-//  On is_in_flow == false, triggers ShieldTimerManager and notification.
+//  Posts HRV to POST /api/v1/hrv_stream. applyFlowResponse updates DriftSessionState,
+//  WellnessHistoryStore, then invokes onFlowStateRestored / onFlowStateLost for shield UX.
 //
 
 import Foundation

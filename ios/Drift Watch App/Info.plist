@@ -31,6 +31,6 @@
 	<key>WKApplication</key>
 	<true/>
 	<key>WKCompanionAppBundleIdentifier</key>
-	<string>com.drift.Drift</string>
+	<string>com.flow.drift</string>
 </dict>
 </plist>
